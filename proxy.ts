@@ -5,7 +5,12 @@ import { Roles } from "./types/globals";
 // Protecting routes
 
 // const isProtectedRoute = createRouteMatcher(["/user-profile"]);
-const isPublicRoute = createRouteMatcher(["/", "/sign-in(.*)", "/sign-up(.*)"]);
+const isPublicRoute = createRouteMatcher([
+    "/",
+    "/sign-in(.*)",
+    "/sign-up(.*)",
+    "/api/webhooks(.*)",
+]);
 const isAdminRoute = createRouteMatcher("/admin(.*)");
 
 export default clerkMiddleware(async (auth, req) => {

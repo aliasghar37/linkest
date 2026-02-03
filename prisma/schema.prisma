@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider  =   "prisma-client"
+  output    =   "./generated/prisma"
+}
+
+datasource db {
+  provider = "mongodb"
+  url       =   env("DATABASE_URL")
+}
+
+enum Role {
+    free
+    pro
+    admin
+}
+
+model User {
+    id          String      @id @default(auto()) @map("_id") @db.ObjectId
+    clerkId     String      @unique
+    email       String      @unique
+    firstName   String
+    lastName    String
+    imageUrl    String
+    role        Role        @default(free)
+    links       Link[]
+    createdAt   DateTime    @default(now())
+    updatedAt   DateTime    @updatedAt
+}
+
+model Link {
+    id          String @id @default(auto()) @map("_id") @db.ObjectId
+    shortId     String @unique
+    shortUrl    String 
+    longUrl     String
+    summary     String
+    qrCode      String
+    createdAt   DateTime @default(now())
+
+    clicks      Int     @default(0)
+    clickData   Click[]
+    status      Boolean @default(true)
+
+    userId      String  @db.ObjectId
+    user        User    @relation(fields: [userId], references: [id])
+}
+
+model Click {
+    id        String   @id @default(auto()) @map("_id") @db.ObjectId
+    timestamp DateTime @default(now())
+    
+    linkId    String   @db.ObjectId
+    link      Link     @relation(fields: [linkId], references: [id])
+}
