@@ -1,5 +1,5 @@
-// "use client";
-import * as React from "react";
+"use client";
+import { useState } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
@@ -12,14 +12,12 @@ import MenuItem from "@mui/material/MenuItem";
 import Drawer from "@mui/material/Drawer";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import ColorModeIconDropdown from "./shared-theme/ColorModeIconDropdown";
 import LinkestLogo from "./LinkestIcon";
 import Link from "next/link";
 import {
     SignedIn,
     SignedOut,
     SignInButton,
-    SignOutButton,
     SignUpButton,
     UserButton,
 } from "@clerk/nextjs";
@@ -41,7 +39,7 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 }));
 
 export default function AppAppBar() {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     const toggleDrawer = (newOpen: boolean) => () => {
         setOpen(newOpen);
@@ -161,34 +159,30 @@ export default function AppAppBar() {
                         </SignedOut>
 
                         <SignedIn>
-                            {/* <Link href="/user-profile">
-                                <ColorModeIconDropdown />
-                            </Link> */}
-                            {/* <SignOutButton>
-                                <span style={{ cursor: "pointer" }}>
-                                    <Button
-                                        color="primary"
-                                        variant="text"
-                                        size="small"
-                                        component="span"
-                                    >
-                                        Sign out
-                                    </Button>
-                                </span>
-                            </SignOutButton> */}
                             <Button
                                 color="primary"
                                 variant="text"
                                 size="small"
                                 component="span"
                             >
-                                Dashboard
+                                <Link href="/dashboard">Dashboard</Link>
                             </Button>
                             <UserButton />
                         </SignedIn>
                     </Box>
                     <Box sx={{ display: { xs: "flex", md: "none" }, gap: 1 }}>
-                        <ColorModeIconDropdown size="medium" />
+                        <SignedIn>
+                            <Button
+                                color="primary"
+                                variant="text"
+                                size="small"
+                                component="span"
+                            >
+                                <Link href="/dashboard">Dashboard</Link>
+                            </Button>
+                            <UserButton />
+                        </SignedIn>
+
                         <IconButton
                             aria-label="Menu button"
                             onClick={toggleDrawer(true)}
@@ -199,11 +193,6 @@ export default function AppAppBar() {
                             anchor="top"
                             open={open}
                             onClose={toggleDrawer(false)}
-                            // PaperProps={{
-                            //     sx: {
-                            //         top: "var(--template-frame-height, 0px)",
-                            //     },
-                            // }}
                         >
                             <Box
                                 sx={{
@@ -222,30 +211,98 @@ export default function AppAppBar() {
                                     </IconButton>
                                 </Box>
 
-                                <MenuItem>Features</MenuItem>
-                                <MenuItem>Testimonials</MenuItem>
-                                <MenuItem>Highlights</MenuItem>
-                                <MenuItem>Pricing</MenuItem>
-                                <MenuItem href="#faq">FAQ</MenuItem>
-                                <Divider sx={{ my: 3 }} />
                                 <MenuItem>
-                                    <Button
-                                        color="primary"
-                                        variant="contained"
-                                        fullWidth
-                                    >
-                                        Sign up
-                                    </Button>
+                                    <Link href="/#features">
+                                        <Button
+                                            variant="text"
+                                            color="info"
+                                            size="small"
+                                        >
+                                            Features
+                                        </Button>
+                                    </Link>
                                 </MenuItem>
                                 <MenuItem>
-                                    <Button
-                                        color="primary"
-                                        variant="outlined"
-                                        fullWidth
-                                    >
-                                        Sign in
-                                    </Button>
+                                    <Link href="/#testimonials">
+                                        <Button
+                                            variant="text"
+                                            color="info"
+                                            size="small"
+                                        >
+                                            Testimonials
+                                        </Button>
+                                    </Link>
                                 </MenuItem>
+                                <MenuItem>
+                                    <Link href="/#highlights">
+                                        <Button
+                                            variant="text"
+                                            color="info"
+                                            size="small"
+                                        >
+                                            Highlights
+                                        </Button>
+                                    </Link>
+                                </MenuItem>
+                                <MenuItem>
+                                    <Link href="/#pricing">
+                                        <Button
+                                            variant="text"
+                                            color="info"
+                                            size="small"
+                                        >
+                                            Pricing
+                                        </Button>
+                                    </Link>
+                                </MenuItem>
+                                <MenuItem>
+                                    <Link href="/#faq">
+                                        <Button
+                                            variant="text"
+                                            color="info"
+                                            size="small"
+                                            sx={{ minWidth: 0 }}
+                                        >
+                                            FAQ
+                                        </Button>
+                                    </Link>
+                                </MenuItem>
+                                <SignedOut>
+                                    <Divider sx={{ my: 3 }} />
+                                    <MenuItem
+                                        sx={{
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            gap: 1,
+                                            width: "100%",
+                                        }}
+                                    >
+                                        <SignInButton mode="modal">
+                                            <span className="cursor-pointer w-full  ">
+                                                <Button
+                                                    color="primary"
+                                                    variant="outlined"
+                                                    size="medium"
+                                                    fullWidth
+                                                >
+                                                    Sign in
+                                                </Button>
+                                            </span>
+                                        </SignInButton>
+                                        <SignUpButton mode="modal">
+                                            <span className="cursor-pointer w-full ">
+                                                <Button
+                                                    color="primary"
+                                                    variant="contained"
+                                                    size="medium"
+                                                    fullWidth
+                                                >
+                                                    Sign up
+                                                </Button>
+                                            </span>
+                                        </SignUpButton>
+                                    </MenuItem>
+                                </SignedOut>
                             </Box>
                         </Drawer>
                     </Box>

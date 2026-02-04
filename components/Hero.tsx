@@ -1,12 +1,9 @@
-// "use client";
+"use client";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
-import InputLabel from "@mui/material/InputLabel";
 import Stack from "@mui/material/Stack";
-import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import visuallyHidden from "@mui/utils/visuallyHidden";
+import LinkForm from "./LinkForm";
 
 export default function Hero() {
     return (
@@ -50,19 +47,6 @@ export default function Hero() {
                         }}
                     >
                         Shorten Your Loooong Links! :)
-                        {/* <Typography
-                            component="span"
-                            variant="h1"
-                            sx={(theme) => ({
-                                fontSize: "inherit",
-                                color: "primary.main",
-                                ...theme.applyStyles("dark", {
-                                    color: "primary.light",
-                                }),
-                            })}
-                        >
-                            products
-                        </Typography> */}
                     </Typography>
                     <Typography
                         sx={{
@@ -75,58 +59,7 @@ export default function Hero() {
                         service that streamlines your online experience. It also
                         helps you track your links.
                     </Typography>
-                    <form action="">
-                        <Stack
-                            direction={{ xs: "column", sm: "row" }}
-                            spacing={1}
-                            useFlexGap
-                            alignItems="center"
-                            sx={{ pt: 2, width: { xs: "100%", sm: "600px" } }}
-                        >
-                            <InputLabel htmlFor="long-link" sx={visuallyHidden}>
-                                Email
-                            </InputLabel>
-                            <TextField
-                                id="long-link"
-                                hiddenLabel
-                                size="small"
-                                variant="outlined"
-                                aria-label="Enter Long Link"
-                                placeholder="Enter long link to shorten"
-                                fullWidth
-                                slotProps={{
-                                    htmlInput: {
-                                        autoComplete: "off",
-                                        "aria-label":
-                                            "Enter your email address",
-                                    },
-                                }}
-                            />
-
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                size="medium"
-                                sx={{
-                                    minWidth: "fit-content",
-                                }}
-                                type="submit"
-                            >
-                                Shorten link
-                            </Button>
-                        </Stack>
-                    </form>
-                    {/* <Typography
-                        variant="caption"
-                        color="text.secondary"
-                        sx={{ textAlign: "center" }}
-                    >
-                        By clicking &quot;Start now&quot; you agree to our&nbsp;
-                        <Link href="#" color="primary">
-                            Terms & Conditions
-                        </Link>
-                        .
-                    </Typography> */}
+                    <LinkForm align="center" />
                 </Stack>
             </Container>
         </Box>

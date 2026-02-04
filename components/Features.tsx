@@ -1,5 +1,5 @@
-// "use client";
-import * as React from "react";
+"use client";
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -140,7 +140,7 @@ export function MobileLayout({
 }
 
 export default function Features() {
-    const [selectedItemIndex, setSelectedItemIndex] = React.useState(0);
+    const [selectedItemIndex, setSelectedItemIndex] = useState(0);
 
     const handleItemClick = (index: number) => {
         setSelectedItemIndex(index);

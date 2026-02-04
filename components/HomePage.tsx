@@ -1,7 +1,5 @@
-"use client";
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
-import AppTheme from "../theme";
 import AppAppBar from "./AppAppBar";
 import Hero from "./Hero";
 import Highlights from "./Highlights";
@@ -11,9 +9,9 @@ import Testimonials from "./Testimonials";
 import FAQ from "./FAQ";
 import Footer from "./Footer";
 
-export default function HomePage(props: { disableCustomTheme?: boolean }) {
+export default function HomePage() {
     return (
-        <AppTheme {...props}>
+        <>
             <CssBaseline enableColorScheme />
 
             <AppAppBar />
@@ -31,6 +29,6 @@ export default function HomePage(props: { disableCustomTheme?: boolean }) {
                 <Divider />
                 <Footer />
             </div>
-        </AppTheme>
+        </>
     );
 }

@@ -1,4 +1,4 @@
-// "use client";
+"use client";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
@@ -18,9 +18,7 @@ const userTestimonials = [
             "I absolutely love how versatile this product is! Whether I'm tackling work projects or indulging in my favorite hobbies, it seamlessly adapts to my changing needs. Its intuitive design has truly enhanced my daily routine, making tasks more efficient and enjoyable.",
     },
     {
-        avatar: (
-            <Avatar alt="Travis Howard" src="" />
-        ),
+        avatar: <Avatar alt="Travis Howard" src="" />,
         name: "Travis Howard",
         occupation: "Lead Product Designer",
         testimonial:
@@ -41,9 +39,7 @@ const userTestimonials = [
             "I appreciate the attention to detail in the design of this product. The small touches make a big difference, and it's evident that the creators focused on delivering a premium experience.",
     },
     {
-        avatar: (
-            <Avatar alt="Travis Howard" src="" />
-        ),
+        avatar: <Avatar alt="Travis Howard" src="" />,
         name: "John Smith",
         occupation: "Product Designer",
         testimonial:

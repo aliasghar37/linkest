@@ -1,4 +1,4 @@
-// "use client";
+"use client"
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -16,12 +16,7 @@ const tiers = [
     {
         title: "Free",
         price: "0",
-        description: [
-            "10 links",
-            "",
-            "Help center access",
-            "Email support",
-        ],
+        description: ["10 links", "", "Help center access", "Email support"],
         buttonText: "Sign up for free",
         buttonVariant: "outlined",
         buttonColor: "primary",
