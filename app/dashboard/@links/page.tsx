@@ -13,6 +13,9 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import TableFooter from "@mui/material/TableFooter";
+import TablePagination from "@mui/material/TablePagination";
+import { MyTableFooter } from "@/components/TablePagination";
 
 function createData(
     shortLink: string,
@@ -124,6 +127,9 @@ export default function CollapsibleTable() {
                         <Row key={row.shortLink} row={row} />
                     ))}
                 </TableBody>
+                <TableFooter>
+                    <MyTableFooter />
+                </TableFooter>
             </Table>
         </TableContainer>
     );

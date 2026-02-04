@@ -1,4 +1,3 @@
-"use client";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
@@ -7,18 +6,8 @@ import LinkForm from "./LinkForm";
 
 export default function Hero() {
     return (
-        <Box
-            id="hero"
-            sx={(theme) => ({
-                width: "100%",
-                backgroundRepeat: "no-repeat",
-
-                ...theme.applyStyles("dark", {
-                    backgroundImage:
-                        "radial-gradient(ellipse 80% 100% at 50% -20%, hsl(210, 100%, 16%), transparent)",
-                }),
-            })}
-        >
+        <Box id="hero">
+            <div className="absolute min-h-screen w-full bg-no-repeat dark:bg-[radial-gradient(ellipse_80%_100%_at_50%_-50%,hsl(210,100%,26%),transparent)]  "></div>
             <Container
                 sx={{
                     display: "flex",

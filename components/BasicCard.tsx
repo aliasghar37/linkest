@@ -3,7 +3,13 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 
-export default function BasicCard() {
+export default function BasicCard({
+    label,
+    value,
+}: {
+    label: string;
+    value: string;
+}) {
     return (
         <Card
             sx={(theme) => ({
@@ -26,10 +32,10 @@ export default function BasicCard() {
                     gutterBottom
                     sx={{ color: "text.secondary", fontSize: 14 }}
                 >
-                    Total Clicks
+                    {label}
                 </Typography>
                 <Typography variant="h5" component="div">
-                    200
+                    {value}
                 </Typography>
             </CardContent>
         </Card>
