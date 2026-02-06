@@ -6,10 +6,36 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import visuallyHidden from "@mui/utils/visuallyHidden";
 import shortenUrl from "@/app/actions/handleLinkForm";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { SignIn } from "@clerk/nextjs";
+import { useAlert } from "./AlertContext";
 
 export default function LinkForm({ align }: { align: "center" | "start" }) {
     const [state, formAction, isPending] = useActionState(shortenUrl, null);
+    const { showAlert } = useAlert();
+    const router = useRouter();
+
+    useEffect(() => {
+        if (!state) return;
+
+        if (state?.requiresAuth) {
+            showAlert("Please signin to proceed!", "info");
+        } else if (state?.error) {
+            showAlert(state?.error, "error");
+        } else if (state.success && state.shortId) {
+            showAlert("Your link has been shortened successfully", "success");
+            router.push(`/dashboard?new=${state.shortId}`);
+        }
+    }, [state, showAlert, router]);
+
+    if (state?.requiresAuth) {
+        return <SignIn routing="hash" />;
+    }
+
+    if (state?.error) {
+        return null;
+    }
 
     return (
         <form action={formAction}>
@@ -48,8 +74,9 @@ export default function LinkForm({ align }: { align: "center" | "start" }) {
                         minWidth: "fit-content",
                     }}
                     type="submit"
+                    disabled={isPending}
                 >
-                    Shorten link
+                    {isPending ? "Shortening..." : "Shorten link"}
                 </Button>
             </Stack>
         </form>

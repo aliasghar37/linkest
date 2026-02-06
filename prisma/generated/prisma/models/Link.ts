@@ -40,6 +40,7 @@ export type LinkMinAggregateOutputType = {
   shortUrl: string | null
   longUrl: string | null
   summary: string | null
+  title: string | null
   qrCode: string | null
   createdAt: Date | null
   clicks: number | null
@@ -53,6 +54,7 @@ export type LinkMaxAggregateOutputType = {
   shortUrl: string | null
   longUrl: string | null
   summary: string | null
+  title: string | null
   qrCode: string | null
   createdAt: Date | null
   clicks: number | null
@@ -66,6 +68,7 @@ export type LinkCountAggregateOutputType = {
   shortUrl: number
   longUrl: number
   summary: number
+  title: number
   qrCode: number
   createdAt: number
   clicks: number
@@ -89,6 +92,7 @@ export type LinkMinAggregateInputType = {
   shortUrl?: true
   longUrl?: true
   summary?: true
+  title?: true
   qrCode?: true
   createdAt?: true
   clicks?: true
@@ -102,6 +106,7 @@ export type LinkMaxAggregateInputType = {
   shortUrl?: true
   longUrl?: true
   summary?: true
+  title?: true
   qrCode?: true
   createdAt?: true
   clicks?: true
@@ -115,6 +120,7 @@ export type LinkCountAggregateInputType = {
   shortUrl?: true
   longUrl?: true
   summary?: true
+  title?: true
   qrCode?: true
   createdAt?: true
   clicks?: true
@@ -214,8 +220,9 @@ export type LinkGroupByOutputType = {
   shortId: string
   shortUrl: string
   longUrl: string
-  summary: string | null
-  qrCode: string | null
+  summary: string
+  title: string
+  qrCode: string
   createdAt: Date
   clicks: number
   status: boolean
@@ -250,8 +257,9 @@ export type LinkWhereInput = {
   shortId?: Prisma.StringFilter<"Link"> | string
   shortUrl?: Prisma.StringFilter<"Link"> | string
   longUrl?: Prisma.StringFilter<"Link"> | string
-  summary?: Prisma.StringNullableFilter<"Link"> | string | null
-  qrCode?: Prisma.StringNullableFilter<"Link"> | string | null
+  summary?: Prisma.StringFilter<"Link"> | string
+  title?: Prisma.StringFilter<"Link"> | string
+  qrCode?: Prisma.StringFilter<"Link"> | string
   createdAt?: Prisma.DateTimeFilter<"Link"> | Date | string
   clicks?: Prisma.IntFilter<"Link"> | number
   status?: Prisma.BoolFilter<"Link"> | boolean
@@ -266,6 +274,7 @@ export type LinkOrderByWithRelationInput = {
   shortUrl?: Prisma.SortOrder
   longUrl?: Prisma.SortOrder
   summary?: Prisma.SortOrder
+  title?: Prisma.SortOrder
   qrCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   clicks?: Prisma.SortOrder
@@ -283,8 +292,9 @@ export type LinkWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.LinkWhereInput | Prisma.LinkWhereInput[]
   shortUrl?: Prisma.StringFilter<"Link"> | string
   longUrl?: Prisma.StringFilter<"Link"> | string
-  summary?: Prisma.StringNullableFilter<"Link"> | string | null
-  qrCode?: Prisma.StringNullableFilter<"Link"> | string | null
+  summary?: Prisma.StringFilter<"Link"> | string
+  title?: Prisma.StringFilter<"Link"> | string
+  qrCode?: Prisma.StringFilter<"Link"> | string
   createdAt?: Prisma.DateTimeFilter<"Link"> | Date | string
   clicks?: Prisma.IntFilter<"Link"> | number
   status?: Prisma.BoolFilter<"Link"> | boolean
@@ -299,6 +309,7 @@ export type LinkOrderByWithAggregationInput = {
   shortUrl?: Prisma.SortOrder
   longUrl?: Prisma.SortOrder
   summary?: Prisma.SortOrder
+  title?: Prisma.SortOrder
   qrCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   clicks?: Prisma.SortOrder
@@ -319,8 +330,9 @@ export type LinkScalarWhereWithAggregatesInput = {
   shortId?: Prisma.StringWithAggregatesFilter<"Link"> | string
   shortUrl?: Prisma.StringWithAggregatesFilter<"Link"> | string
   longUrl?: Prisma.StringWithAggregatesFilter<"Link"> | string
-  summary?: Prisma.StringNullableWithAggregatesFilter<"Link"> | string | null
-  qrCode?: Prisma.StringNullableWithAggregatesFilter<"Link"> | string | null
+  summary?: Prisma.StringWithAggregatesFilter<"Link"> | string
+  title?: Prisma.StringWithAggregatesFilter<"Link"> | string
+  qrCode?: Prisma.StringWithAggregatesFilter<"Link"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Link"> | Date | string
   clicks?: Prisma.IntWithAggregatesFilter<"Link"> | number
   status?: Prisma.BoolWithAggregatesFilter<"Link"> | boolean
@@ -332,8 +344,9 @@ export type LinkCreateInput = {
   shortId: string
   shortUrl: string
   longUrl: string
-  summary?: string | null
-  qrCode?: string | null
+  summary: string
+  title: string
+  qrCode: string
   createdAt?: Date | string
   clicks?: number
   status?: boolean
@@ -346,8 +359,9 @@ export type LinkUncheckedCreateInput = {
   shortId: string
   shortUrl: string
   longUrl: string
-  summary?: string | null
-  qrCode?: string | null
+  summary: string
+  title: string
+  qrCode: string
   createdAt?: Date | string
   clicks?: number
   status?: boolean
@@ -359,8 +373,9 @@ export type LinkUpdateInput = {
   shortId?: Prisma.StringFieldUpdateOperationsInput | string
   shortUrl?: Prisma.StringFieldUpdateOperationsInput | string
   longUrl?: Prisma.StringFieldUpdateOperationsInput | string
-  summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  summary?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   clicks?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -372,8 +387,9 @@ export type LinkUncheckedUpdateInput = {
   shortId?: Prisma.StringFieldUpdateOperationsInput | string
   shortUrl?: Prisma.StringFieldUpdateOperationsInput | string
   longUrl?: Prisma.StringFieldUpdateOperationsInput | string
-  summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  summary?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   clicks?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -386,8 +402,9 @@ export type LinkCreateManyInput = {
   shortId: string
   shortUrl: string
   longUrl: string
-  summary?: string | null
-  qrCode?: string | null
+  summary: string
+  title: string
+  qrCode: string
   createdAt?: Date | string
   clicks?: number
   status?: boolean
@@ -398,8 +415,9 @@ export type LinkUpdateManyMutationInput = {
   shortId?: Prisma.StringFieldUpdateOperationsInput | string
   shortUrl?: Prisma.StringFieldUpdateOperationsInput | string
   longUrl?: Prisma.StringFieldUpdateOperationsInput | string
-  summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  summary?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   clicks?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -409,8 +427,9 @@ export type LinkUncheckedUpdateManyInput = {
   shortId?: Prisma.StringFieldUpdateOperationsInput | string
   shortUrl?: Prisma.StringFieldUpdateOperationsInput | string
   longUrl?: Prisma.StringFieldUpdateOperationsInput | string
-  summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  summary?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   clicks?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -433,6 +452,7 @@ export type LinkCountOrderByAggregateInput = {
   shortUrl?: Prisma.SortOrder
   longUrl?: Prisma.SortOrder
   summary?: Prisma.SortOrder
+  title?: Prisma.SortOrder
   qrCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   clicks?: Prisma.SortOrder
@@ -450,6 +470,7 @@ export type LinkMaxOrderByAggregateInput = {
   shortUrl?: Prisma.SortOrder
   longUrl?: Prisma.SortOrder
   summary?: Prisma.SortOrder
+  title?: Prisma.SortOrder
   qrCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   clicks?: Prisma.SortOrder
@@ -463,6 +484,7 @@ export type LinkMinOrderByAggregateInput = {
   shortUrl?: Prisma.SortOrder
   longUrl?: Prisma.SortOrder
   summary?: Prisma.SortOrder
+  title?: Prisma.SortOrder
   qrCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   clicks?: Prisma.SortOrder
@@ -521,11 +543,6 @@ export type LinkUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.LinkScalarWhereInput | Prisma.LinkScalarWhereInput[]
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-  unset?: boolean
-}
-
 export type IntFieldUpdateOperationsInput = {
   set?: number
   increment?: number
@@ -557,8 +574,9 @@ export type LinkCreateWithoutUserInput = {
   shortId: string
   shortUrl: string
   longUrl: string
-  summary?: string | null
-  qrCode?: string | null
+  summary: string
+  title: string
+  qrCode: string
   createdAt?: Date | string
   clicks?: number
   status?: boolean
@@ -570,8 +588,9 @@ export type LinkUncheckedCreateWithoutUserInput = {
   shortId: string
   shortUrl: string
   longUrl: string
-  summary?: string | null
-  qrCode?: string | null
+  summary: string
+  title: string
+  qrCode: string
   createdAt?: Date | string
   clicks?: number
   status?: boolean
@@ -611,8 +630,9 @@ export type LinkScalarWhereInput = {
   shortId?: Prisma.StringFilter<"Link"> | string
   shortUrl?: Prisma.StringFilter<"Link"> | string
   longUrl?: Prisma.StringFilter<"Link"> | string
-  summary?: Prisma.StringNullableFilter<"Link"> | string | null
-  qrCode?: Prisma.StringNullableFilter<"Link"> | string | null
+  summary?: Prisma.StringFilter<"Link"> | string
+  title?: Prisma.StringFilter<"Link"> | string
+  qrCode?: Prisma.StringFilter<"Link"> | string
   createdAt?: Prisma.DateTimeFilter<"Link"> | Date | string
   clicks?: Prisma.IntFilter<"Link"> | number
   status?: Prisma.BoolFilter<"Link"> | boolean
@@ -624,8 +644,9 @@ export type LinkCreateWithoutClickDataInput = {
   shortId: string
   shortUrl: string
   longUrl: string
-  summary?: string | null
-  qrCode?: string | null
+  summary: string
+  title: string
+  qrCode: string
   createdAt?: Date | string
   clicks?: number
   status?: boolean
@@ -637,8 +658,9 @@ export type LinkUncheckedCreateWithoutClickDataInput = {
   shortId: string
   shortUrl: string
   longUrl: string
-  summary?: string | null
-  qrCode?: string | null
+  summary: string
+  title: string
+  qrCode: string
   createdAt?: Date | string
   clicks?: number
   status?: boolean
@@ -665,8 +687,9 @@ export type LinkUpdateWithoutClickDataInput = {
   shortId?: Prisma.StringFieldUpdateOperationsInput | string
   shortUrl?: Prisma.StringFieldUpdateOperationsInput | string
   longUrl?: Prisma.StringFieldUpdateOperationsInput | string
-  summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  summary?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   clicks?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -677,8 +700,9 @@ export type LinkUncheckedUpdateWithoutClickDataInput = {
   shortId?: Prisma.StringFieldUpdateOperationsInput | string
   shortUrl?: Prisma.StringFieldUpdateOperationsInput | string
   longUrl?: Prisma.StringFieldUpdateOperationsInput | string
-  summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  summary?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   clicks?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -690,8 +714,9 @@ export type LinkCreateManyUserInput = {
   shortId: string
   shortUrl: string
   longUrl: string
-  summary?: string | null
-  qrCode?: string | null
+  summary: string
+  title: string
+  qrCode: string
   createdAt?: Date | string
   clicks?: number
   status?: boolean
@@ -701,8 +726,9 @@ export type LinkUpdateWithoutUserInput = {
   shortId?: Prisma.StringFieldUpdateOperationsInput | string
   shortUrl?: Prisma.StringFieldUpdateOperationsInput | string
   longUrl?: Prisma.StringFieldUpdateOperationsInput | string
-  summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  summary?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   clicks?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -713,8 +739,9 @@ export type LinkUncheckedUpdateWithoutUserInput = {
   shortId?: Prisma.StringFieldUpdateOperationsInput | string
   shortUrl?: Prisma.StringFieldUpdateOperationsInput | string
   longUrl?: Prisma.StringFieldUpdateOperationsInput | string
-  summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  summary?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   clicks?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -725,8 +752,9 @@ export type LinkUncheckedUpdateManyWithoutUserInput = {
   shortId?: Prisma.StringFieldUpdateOperationsInput | string
   shortUrl?: Prisma.StringFieldUpdateOperationsInput | string
   longUrl?: Prisma.StringFieldUpdateOperationsInput | string
-  summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  summary?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   clicks?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -769,6 +797,7 @@ export type LinkSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   shortUrl?: boolean
   longUrl?: boolean
   summary?: boolean
+  title?: boolean
   qrCode?: boolean
   createdAt?: boolean
   clicks?: boolean
@@ -787,6 +816,7 @@ export type LinkSelectScalar = {
   shortUrl?: boolean
   longUrl?: boolean
   summary?: boolean
+  title?: boolean
   qrCode?: boolean
   createdAt?: boolean
   clicks?: boolean
@@ -794,7 +824,7 @@ export type LinkSelectScalar = {
   userId?: boolean
 }
 
-export type LinkOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "shortId" | "shortUrl" | "longUrl" | "summary" | "qrCode" | "createdAt" | "clicks" | "status" | "userId", ExtArgs["result"]["link"]>
+export type LinkOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "shortId" | "shortUrl" | "longUrl" | "summary" | "title" | "qrCode" | "createdAt" | "clicks" | "status" | "userId", ExtArgs["result"]["link"]>
 export type LinkInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   clickData?: boolean | Prisma.Link$clickDataArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -812,8 +842,9 @@ export type $LinkPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     shortId: string
     shortUrl: string
     longUrl: string
-    summary: string | null
-    qrCode: string | null
+    summary: string
+    title: string
+    qrCode: string
     createdAt: Date
     clicks: number
     status: boolean
@@ -1217,6 +1248,7 @@ export interface LinkFieldRefs {
   readonly shortUrl: Prisma.FieldRef<"Link", 'String'>
   readonly longUrl: Prisma.FieldRef<"Link", 'String'>
   readonly summary: Prisma.FieldRef<"Link", 'String'>
+  readonly title: Prisma.FieldRef<"Link", 'String'>
   readonly qrCode: Prisma.FieldRef<"Link", 'String'>
   readonly createdAt: Prisma.FieldRef<"Link", 'DateTime'>
   readonly clicks: Prisma.FieldRef<"Link", 'Int'>

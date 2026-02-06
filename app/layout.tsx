@@ -7,6 +7,8 @@ import { Roboto } from "next/font/google";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "../theme";
 import AppTheme from "../theme";
+import { AlertProvider } from "@/components/AlertContext";
+import DisplayAlert from "@/components/DisplayAlert";
 
 const roboto = Roboto({
     weight: ["300", "400", "500", "700"],
@@ -32,7 +34,12 @@ export default function RootLayout({
                 <body className={` antialiased`}>
                     <AppRouterCacheProvider>
                         <ThemeProvider theme={theme}>
-                            <AppTheme>{children}</AppTheme>
+                            <AppTheme>
+                                <AlertProvider>
+                                    <DisplayAlert />
+                                    {children}
+                                </AlertProvider>
+                            </AppTheme>
                         </ThemeProvider>
                     </AppRouterCacheProvider>
                 </body>

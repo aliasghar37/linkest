@@ -747,6 +747,7 @@ export const LinkScalarFieldEnum = {
   shortUrl: 'shortUrl',
   longUrl: 'longUrl',
   summary: 'summary',
+  title: 'title',
   qrCode: 'qrCode',
   createdAt: 'createdAt',
   clicks: 'clicks',

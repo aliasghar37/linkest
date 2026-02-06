@@ -1,14 +1,6 @@
 import AppAppBar from "@/components/AppAppBar";
 import { SignIn } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
-import { Roboto } from "next/font/google";
-
-const roboto = Roboto({
-    weight: ["300", "400", "500", "700"],
-    subsets: ["latin"],
-    display: "swap",
-    variable: "--font-roboto",
-});
 
 export default async function ({
     children,
@@ -44,7 +36,6 @@ export default async function ({
                         </div>
                     </div>
                 </div>
-
                 {children}
             </div>
         </>

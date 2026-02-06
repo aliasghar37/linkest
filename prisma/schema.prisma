@@ -38,16 +38,17 @@ model Link {
     shortId     String @unique
     shortUrl    String 
     longUrl     String
-    summary     String?
-    qrCode      String?
+    summary     String
+    title       String
+    qrCode      String
     createdAt   DateTime @default(now())
 
     clicks      Int     @default(0)
     clickData   Click[]
     status      Boolean @default(true)
 
-    userId      String  @db.ObjectId
-    user        User    @relation(fields: [userId], references: [id])
+    userId      String  
+    user        User    @relation(fields: [userId], references: [clerkId])
 }
 
 model Click {
