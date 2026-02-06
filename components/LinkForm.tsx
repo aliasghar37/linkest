@@ -1,12 +1,18 @@
+"use client";
+
 import Button from "@mui/material/Button";
 import InputLabel from "@mui/material/InputLabel";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import visuallyHidden from "@mui/utils/visuallyHidden";
+import shortenUrl from "@/app/actions/handleLinkForm";
+import { useActionState } from "react";
 
 export default function LinkForm({ align }: { align: "center" | "start" }) {
+    const [state, formAction, isPending] = useActionState(shortenUrl, null);
+
     return (
-        <form action="">
+        <form action={formAction}>
             <Stack
                 direction={{ xs: "column", sm: "row" }}
                 spacing={1}
@@ -20,6 +26,7 @@ export default function LinkForm({ align }: { align: "center" | "start" }) {
                 </InputLabel>
                 <TextField
                     id="long-link"
+                    name="longUrl"
                     hiddenLabel
                     size="small"
                     variant="outlined"

@@ -27,3 +27,13 @@ export type User = Prisma.UserModel
  * 
  */
 export type Link = Prisma.LinkModel
+/**
+ * Model Click
+ * 
+ */
+export type Click = Prisma.ClickModel
+/**
+ * Model Counter
+ * 
+ */
+export type Counter = Prisma.CounterModel

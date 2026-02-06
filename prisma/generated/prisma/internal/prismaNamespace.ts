@@ -391,7 +391,9 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   User: 'User',
-  Link: 'Link'
+  Link: 'Link',
+  Click: 'Click',
+  Counter: 'Counter'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -407,7 +409,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "link"
+    modelProps: "user" | "link" | "click" | "counter"
     txIsolationLevel: never
   }
   model: {
@@ -559,6 +561,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Click: {
+      payload: Prisma.$ClickPayload<ExtArgs>
+      fields: Prisma.ClickFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ClickFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClickPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ClickFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClickPayload>
+        }
+        findFirst: {
+          args: Prisma.ClickFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClickPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ClickFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClickPayload>
+        }
+        findMany: {
+          args: Prisma.ClickFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClickPayload>[]
+        }
+        create: {
+          args: Prisma.ClickCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClickPayload>
+        }
+        createMany: {
+          args: Prisma.ClickCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.ClickDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClickPayload>
+        }
+        update: {
+          args: Prisma.ClickUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClickPayload>
+        }
+        deleteMany: {
+          args: Prisma.ClickDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ClickUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.ClickUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClickPayload>
+        }
+        aggregate: {
+          args: Prisma.ClickAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateClick>
+        }
+        groupBy: {
+          args: Prisma.ClickGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ClickGroupByOutputType>[]
+        }
+        findRaw: {
+          args: Prisma.ClickFindRawArgs<ExtArgs>
+          result: Prisma.JsonObject
+        }
+        aggregateRaw: {
+          args: Prisma.ClickAggregateRawArgs<ExtArgs>
+          result: Prisma.JsonObject
+        }
+        count: {
+          args: Prisma.ClickCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ClickCountAggregateOutputType> | number
+        }
+      }
+    }
+    Counter: {
+      payload: Prisma.$CounterPayload<ExtArgs>
+      fields: Prisma.CounterFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CounterFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CounterPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CounterFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CounterPayload>
+        }
+        findFirst: {
+          args: Prisma.CounterFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CounterPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CounterFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CounterPayload>
+        }
+        findMany: {
+          args: Prisma.CounterFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CounterPayload>[]
+        }
+        create: {
+          args: Prisma.CounterCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CounterPayload>
+        }
+        createMany: {
+          args: Prisma.CounterCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.CounterDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CounterPayload>
+        }
+        update: {
+          args: Prisma.CounterUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CounterPayload>
+        }
+        deleteMany: {
+          args: Prisma.CounterDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CounterUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.CounterUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CounterPayload>
+        }
+        aggregate: {
+          args: Prisma.CounterAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCounter>
+        }
+        groupBy: {
+          args: Prisma.CounterGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CounterGroupByOutputType>[]
+        }
+        findRaw: {
+          args: Prisma.CounterFindRawArgs<ExtArgs>
+          result: Prisma.JsonObject
+        }
+        aggregateRaw: {
+          args: Prisma.CounterAggregateRawArgs<ExtArgs>
+          result: Prisma.JsonObject
+        }
+        count: {
+          args: Prisma.CounterCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CounterCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -605,6 +755,24 @@ export const LinkScalarFieldEnum = {
 } as const
 
 export type LinkScalarFieldEnum = (typeof LinkScalarFieldEnum)[keyof typeof LinkScalarFieldEnum]
+
+
+export const ClickScalarFieldEnum = {
+  id: 'id',
+  timestamp: 'timestamp',
+  linkId: 'linkId'
+} as const
+
+export type ClickScalarFieldEnum = (typeof ClickScalarFieldEnum)[keyof typeof ClickScalarFieldEnum]
+
+
+export const CounterScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  counter: 'counter'
+} as const
+
+export type CounterScalarFieldEnum = (typeof CounterScalarFieldEnum)[keyof typeof CounterScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -793,6 +961,8 @@ export interface PrismaClientOptions {
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   link?: Prisma.LinkOmit
+  click?: Prisma.ClickOmit
+  counter?: Prisma.CounterOmit
 }
 
 /* Types for Logging */

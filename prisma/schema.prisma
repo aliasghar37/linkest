@@ -38,8 +38,8 @@ model Link {
     shortId     String @unique
     shortUrl    String 
     longUrl     String
-    summary     String
-    qrCode      String
+    summary     String?
+    qrCode      String?
     createdAt   DateTime @default(now())
 
     clicks      Int     @default(0)
@@ -56,4 +56,10 @@ model Click {
     
     linkId    String   @db.ObjectId
     link      Link     @relation(fields: [linkId], references: [id])
+}
+
+model Counter {
+    id      String @id @default(auto()) @map("_id") @db.ObjectId
+    name    String @unique 
+    counter Int    @default(0)
 }

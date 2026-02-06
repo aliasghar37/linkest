@@ -50,7 +50,9 @@ export const AnyNull = runtime.objectEnumValues.instances.AnyNull
 
 export const ModelName = {
   User: 'User',
-  Link: 'Link'
+  Link: 'Link',
+  Click: 'Click',
+  Counter: 'Counter'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -88,6 +90,24 @@ export const LinkScalarFieldEnum = {
 } as const
 
 export type LinkScalarFieldEnum = (typeof LinkScalarFieldEnum)[keyof typeof LinkScalarFieldEnum]
+
+
+export const ClickScalarFieldEnum = {
+  id: 'id',
+  timestamp: 'timestamp',
+  linkId: 'linkId'
+} as const
+
+export type ClickScalarFieldEnum = (typeof ClickScalarFieldEnum)[keyof typeof ClickScalarFieldEnum]
+
+
+export const CounterScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  counter: 'counter'
+} as const
+
+export type CounterScalarFieldEnum = (typeof CounterScalarFieldEnum)[keyof typeof CounterScalarFieldEnum]
 
 
 export const SortOrder = {
