@@ -9,7 +9,7 @@ export default function BasicAlerts() {
 
     return (
         <Snackbar open={alert.open} autoHideDuration={6000} onClose={hideAlert}>
-            <Alert onClose={hideAlert} severity={alert.severity}>
+            <Alert onClose={hideAlert} severity={alert.type}>
                 {alert.message}
             </Alert>
         </Snackbar>

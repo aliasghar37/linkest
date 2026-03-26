@@ -5,10 +5,10 @@ type AlertType = "success" | "error" | "info";
 type AlertState = {
     open: boolean;
     message: string;
-    severity: AlertType;
+    type: AlertType;
 };
 type AlertContextType = {
-    showAlert: (message: string, severity?: AlertType) => void;
+    showAlert: (message: string, type?: AlertType) => void;
     hideAlert: () => void;
     alert: AlertState;
 };
@@ -17,12 +17,12 @@ export function AlertProvider({ children }: { children: React.ReactNode }) {
     const [alert, setAlert] = useState<AlertState>({
         open: false,
         message: "",
-        severity: "info",
+        type: "info",
     });
 
     const showAlert = useCallback(
-        (message: string, severity: AlertType = "info") => {
-            setAlert({ open: true, message, severity });
+        (message: string, type: AlertType = "info") => {
+            setAlert({ open: true, message, type });
         },
         [],
     );

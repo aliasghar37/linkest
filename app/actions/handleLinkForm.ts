@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
+import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
 import QRCode from "qrcode";
 import { tavily } from "@tavily/core";
 import Groq from "groq-sdk";
@@ -30,6 +30,7 @@ const generateSummary = async (longUrl: string) => {
         const tvly = tavily({ apiKey: process.env.TAVILY_API });
         const responseTavily = await tvly.extract([longUrl]);
         const { title, rawContent } = responseTavily.results[0];
+        console.log("rawContent: >>>>>>))))", rawContent);
         const groq = new Groq({ apiKey: process.env.GROQ_API });
 
         const response = await groq.chat.completions.create({
@@ -55,15 +56,46 @@ const generateSummary = async (longUrl: string) => {
                     content: `Summarize this webpage:\n\n${rawContent}`,
                 },
             ],
-            max_tokens: 300,
+            max_tokens: 180,
             temperature: 0.3,
         });
         const summary = response.choices[0]?.message?.content || null;
+        console.log("summary: >>>>>>))))", summary);
         return { summary, title };
     } catch (error) {
         console.error("Failed to generate summary:", error);
         return { summary: null, title: null };
     }
+};
+
+const checkIfUserExists = async (userId: string) => {
+    const existingUser = await prisma.user.findUnique({
+        where: { clerkId: userId },
+    });
+    if (existingUser) return;
+
+    const client = await clerkClient();
+    const clerkUser = await client.users.getUser(userId);
+    const primaryEmail =
+        clerkUser.emailAddresses.find(
+            (email) => email.id === clerkUser.primaryEmailAddressId,
+        )?.emailAddress ?? clerkUser.emailAddresses[0]?.emailAddress;
+
+    if (!primaryEmail) {
+        throw new Error("No email found for signed-in user");
+    }
+    await prisma.user.upsert({
+        where: { clerkId: userId },
+        update: {},
+        create: {
+            clerkId: userId,
+            email: primaryEmail,
+            firstName: clerkUser.firstName ?? "Unknown",
+            lastName: clerkUser.lastName ?? "User",
+            imageUrl: clerkUser.imageUrl ?? "",
+            role: "free",
+        },
+    });
 };
 
 export default async function shortenUrl(
@@ -82,6 +114,13 @@ export default async function shortenUrl(
     const { userId } = await auth();
     if (!userId)
         return { error: "Please sign in first", requiresAuth: true, longUrl };
+
+    try {
+        await checkIfUserExists(userId);
+    } catch (error) {
+        console.error("Failed to sync user:", error);
+        return { error: "Failed to sync user profile. Please try again." };
+    }
 
     const base62Chars = process.env.BASE_62_CHARACTERS as string;
     let uniqueId = "";
@@ -114,11 +153,15 @@ export default async function shortenUrl(
                 shortUrl,
                 longUrl,
                 qrCode,
-                userId,
+                user: {
+                    connect: {
+                        clerkId: userId,
+                    },
+                },
                 clicks: 0,
                 status: true,
-                summary: summary as string,
-                title: title as string,
+                summary: summary ?? "No summary available",
+                title: title ?? "No title available",
             },
         });
         // Cache in redis (ADD LATER)

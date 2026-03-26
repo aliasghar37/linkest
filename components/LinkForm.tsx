@@ -8,34 +8,28 @@ import visuallyHidden from "@mui/utils/visuallyHidden";
 import shortenUrl from "@/app/actions/handleLinkForm";
 import { useActionState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { SignIn } from "@clerk/nextjs";
 import { useAlert } from "./AlertContext";
+import { useClerk } from "@clerk/nextjs";
 
 export default function LinkForm({ align }: { align: "center" | "start" }) {
     const [state, formAction, isPending] = useActionState(shortenUrl, null);
     const { showAlert } = useAlert();
     const router = useRouter();
+    const clerk = useClerk();
 
     useEffect(() => {
         if (!state) return;
 
         if (state?.requiresAuth) {
             showAlert("Please signin to proceed!", "info");
+            clerk.openSignIn();
         } else if (state?.error) {
             showAlert(state?.error, "error");
         } else if (state.success && state.shortId) {
             showAlert("Your link has been shortened successfully", "success");
             router.push(`/dashboard?new=${state.shortId}`);
         }
-    }, [state, showAlert, router]);
-
-    if (state?.requiresAuth) {
-        return <SignIn routing="hash" />;
-    }
-
-    if (state?.error) {
-        return null;
-    }
+    }, [state, showAlert, router, clerk]);
 
     return (
         <form action={formAction}>
