@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState, MouseEvent } from "react";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import TablePagination from "@mui/material/TablePagination";
@@ -12,7 +12,7 @@ interface TablePaginationActionsProps {
     page: number;
     rowsPerPage: number;
     onPageChange: (
-        event: React.MouseEvent<HTMLButtonElement>,
+        event: MouseEvent<HTMLButtonElement>,
         newPage: number,
     ) => void;
 }
@@ -21,15 +21,11 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
     const theme = useTheme();
     const { count, page, rowsPerPage, onPageChange } = props;
 
-    const handleBackButtonClick = (
-        event: React.MouseEvent<HTMLButtonElement>,
-    ) => {
+    const handleBackButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
         onPageChange(event, page - 1);
     };
 
-    const handleNextButtonClick = (
-        event: React.MouseEvent<HTMLButtonElement>,
-    ) => {
+    const handleNextButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
         onPageChange(event, page + 1);
     };
 
@@ -62,11 +58,11 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
 }
 
 export function MyTableFooter() {
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
 
     const handleChangePage = (
-        event: React.MouseEvent<HTMLButtonElement> | null,
+        event: MouseEvent<HTMLButtonElement> | null,
         newPage: number,
     ) => {
         setPage(newPage);

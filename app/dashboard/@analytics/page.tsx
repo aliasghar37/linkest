@@ -1,5 +1,6 @@
 "use client";
-import * as React from "react";
+
+import { useState, MouseEvent } from "react";
 import { BarChart } from "@mui/x-charts/BarChart";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import ToggleButton from "@mui/material/ToggleButton";
@@ -106,13 +107,13 @@ const chartSetting = {
 };
 
 export default function TickPlacementBars() {
-    const [tickPlacement] = React.useState<
+    const [tickPlacement] = useState<
         "start" | "end" | "middle" | "extremities"
     >("middle");
-    const [tickLabelPlacement] = React.useState<"middle" | "tick">("middle");
-    const [alignment, setAlignment] = React.useState("daily");
+    const [tickLabelPlacement] = useState<"middle" | "tick">("middle");
+    const [alignment, setAlignment] = useState("daily");
     const handleChange = (
-        event: React.MouseEvent<HTMLElement>,
+        event: MouseEvent<HTMLElement>,
         newAlignment: string,
     ) => {
         setAlignment(newAlignment);

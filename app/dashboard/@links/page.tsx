@@ -1,5 +1,6 @@
 "use client";
-import * as React from "react";
+
+import { useState, Fragment } from "react";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
@@ -14,7 +15,6 @@ import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import TableFooter from "@mui/material/TableFooter";
-import TablePagination from "@mui/material/TablePagination";
 import { MyTableFooter } from "@/components/TablePagination";
 
 function createData(
@@ -37,10 +37,10 @@ function createData(
 
 function Row(props: { row: ReturnType<typeof createData> }) {
     const { row } = props;
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     return (
-        <React.Fragment>
+        <Fragment>
             <TableRow>
                 <TableCell>
                     <IconButton
@@ -98,7 +98,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                     </Collapse>
                 </TableCell>
             </TableRow>
-        </React.Fragment>
+        </Fragment>
     );
 }
 const rows = [
