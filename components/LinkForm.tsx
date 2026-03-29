@@ -39,7 +39,7 @@ export default function LinkForm({
         } else if (state.success && state.shortId) {
             setInputValue("");
             showAlert("Your link has been shortened successfully", "success");
-            router.push(`/dashboard?new=${state.shortId}`);
+            router.push(`/dashboard`);
         }
     }, [state, showAlert, router, clerk]);
 

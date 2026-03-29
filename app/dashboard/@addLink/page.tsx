@@ -1,32 +1,38 @@
-"use client";
-
-import LinkForm from "@/components/LinkForm";
+import AddLinkClient from "./AddLinkClient";
+import { auth } from "@clerk/nextjs/server";
+import prisma from "@/lib/prisma";
 import BasicCard from "@/components/BasicCard";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
 
-export default function AddLink() {
-    const searchParams = useSearchParams();
-    const [pendingUrl, setPendingUrl] = useState("");
+type Stats = {
+    links: number;
+    clicks: number;
+};
 
-    useEffect(() => {
-        const url = searchParams.get("pendingUrl");
-        if (url) {
-            setPendingUrl(url);
-            const newUrl = window.location.pathname;
-            window.history.replaceState({}, "", newUrl);
-        }
-    }, [searchParams]);
+export default async function AddLink() {
+    const { userId } = await auth();
+    if (!userId) return { error: "Please sign in first", requiresAuth: true };
+
+    const result = await prisma.link.aggregate({
+        where: { userId },
+        _count: { _all: true },
+        _sum: { clicks: true },
+    });
+    const stats: Stats = {
+        links: result._count._all,
+        clicks: result._sum.clicks ?? 0,
+    };
 
     return (
         <div>
-            <h1 className="text-5xl text-center md:text-start pb-4 ">
+            <h1 className="text-5xl text-center md:text-start pb-4">
                 Dashboard
             </h1>
-            <LinkForm align="start" initialValue={pendingUrl} />
-            <div className="grid grid-cols-2 gap-4 pt-12 content-center ">
-                <BasicCard label="Total Links" value="45" />
-                <BasicCard label="Total Clicks" value="378" />
+            <div>
+                <AddLinkClient />
+                <div className="grid grid-cols-2 gap-4 pt-12 content-center ">
+                    <BasicCard label="Total Links" value={`${stats.links}`} />
+                    <BasicCard label="Total Clicks" value={`${stats.clicks}`} />
+                </div>
             </div>
         </div>
     );
