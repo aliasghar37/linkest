@@ -9,6 +9,7 @@ import TableFooter from "@mui/material/TableFooter";
 import { MyTableFooter } from "@/components/TablePagination";
 import { Row } from "./Row";
 import prisma from "@/lib/prisma";
+import updateLink from "@/app/actions/handleLinkChange";
 
 export type Link = {
     id: string;
@@ -24,7 +25,6 @@ export type Link = {
     userId: string;
     previewPage: boolean;
 };
-
 
 export default async function CollapsibleTable() {
     const links = await prisma.link.findMany();

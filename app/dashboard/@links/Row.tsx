@@ -15,6 +15,8 @@ import MenuItem from "@mui/material/MenuItem";
 import CopyButton from "./CopyButton";
 import FormattedDate from "./FormatedDate";
 import { Switch } from "@mui/material";
+import updateLink from "@/app/actions/handleLinkChange";
+import { useAlert } from "@/components/AlertContext";
 
 const handleDownloadQr = (link: Link) => {
     const linkElement = document.createElement("a");
@@ -26,16 +28,34 @@ const handleDownloadQr = (link: Link) => {
 };
 
 export function Row({ link }: { link: Link }) {
-    const [status, setStatus] = useState("true");
+    const [status, setStatus] = useState(`${link.status}`);
     const [open, setOpen] = useState(false);
     const [checked, setChecked] = useState(link.previewPage);
+    const { showAlert } = useAlert();
 
-    const handleStatusChange = (event: SelectChangeEvent) => {
+    const handleStatusChange = async (event: SelectChangeEvent) => {
         setStatus(event.target.value as string);
+        const boolStatus: boolean = event.target.value === "true";
+
+        const res = await updateLink({
+            userId: link.userId,
+            shortId: link.shortId,
+            status: boolStatus,
+        });
+        if (res) showAlert("URL Status has been changed");
     };
 
-    const handleChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChecked = async (
+        event: React.ChangeEvent<HTMLInputElement>,
+    ) => {
         setChecked(event.target.checked);
+
+        const res = await updateLink({
+            userId: link.userId,
+            shortId: link.shortId,
+            previewPage: event.target.checked,
+        });
+        if (res) showAlert("URL Status has been changed");
     };
 
     return (
@@ -200,14 +220,9 @@ export function Row({ link }: { link: Link }) {
                         value={status}
                         onChange={handleStatusChange}
                         size="small"
-                        displayEmpty
                         sx={{ fontSize: 14 }}
                     >
-                        <MenuItem
-                            value="true"
-                            defaultValue="true"
-                            sx={{ fontSize: 14 }}
-                        >
+                        <MenuItem value="true" sx={{ fontSize: 14 }}>
                             Active
                         </MenuItem>
                         <MenuItem value="false" sx={{ fontSize: 14 }}>
