@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 import QRCode from "qrcode";
 import { tavily } from "@tavily/core";
 import Groq from "groq-sdk";
@@ -162,6 +162,7 @@ export default async function shortenUrl(
                 status: true,
                 summary: summary ?? "No summary available",
                 title: title ?? "No title available",
+                previewPage: true,
             },
         });
         // Cache in redis (ADD LATER)

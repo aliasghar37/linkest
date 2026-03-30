@@ -87,6 +87,7 @@ export const LinkScalarFieldEnum = {
   createdAt: 'createdAt',
   clicks: 'clicks',
   status: 'status',
+  previewPage: 'previewPage',
   userId: 'userId'
 } as const
 

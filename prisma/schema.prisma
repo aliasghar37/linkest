@@ -46,6 +46,7 @@ model Link {
     clicks      Int     @default(0)
     clickData   Click[]
     status      Boolean @default(true)
+    previewPage Boolean @default(true)
 
     userId      String  
     user        User    @relation(fields: [userId], references: [clerkId])
