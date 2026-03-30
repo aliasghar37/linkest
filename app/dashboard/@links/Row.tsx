@@ -42,7 +42,7 @@ export function Row({ link }: { link: Link }) {
             shortId: link.shortId,
             status: boolStatus,
         });
-        if (res) showAlert("URL Status has been changed");
+        if (res) showAlert("URL Status has been changed", "success");
     };
 
     const handleChecked = async (
@@ -55,7 +55,7 @@ export function Row({ link }: { link: Link }) {
             shortId: link.shortId,
             previewPage: event.target.checked,
         });
-        if (res) showAlert("URL Status has been changed");
+        if (res) showAlert("URL Preview Page has been changed", "success");
     };
 
     return (

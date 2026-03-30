@@ -8,6 +8,7 @@ import TableRow from "@mui/material/TableRow";
 import IconButton from "@mui/material/IconButton";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
 interface TablePaginationActionsProps {
     count: number;
@@ -59,25 +60,36 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
     );
 }
 
-export function MyTableFooter() {
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
+export function MyTableFooter({
+    count,
+    currentPage,
+    rowsPerPage,
+}: {
+    count: number;
+    currentPage: number;
+    rowsPerPage: number;
+}) {
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+    console.log(count, currentPage, rowsPerPage);
 
-    const handleChangePage = (
-        event: MouseEvent<HTMLButtonElement> | null,
-        newPage: number,
-    ) => {
-        setPage(newPage);
+    const handleChangePage = (newPage: number, newLimit: number) => {
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("page", newPage.toString());
+        params.set("limit", newLimit.toString());
+
+        router.push(`${pathname}?${params.toString()}`);
     };
 
     return (
         <TableRow>
             <TablePagination
-                rowsPerPageOptions={[10, 20]}
-                colSpan={7}
-                count={5}
+                rowsPerPageOptions={[10, 15]}
+                colSpan={8}
+                count={count}
                 rowsPerPage={rowsPerPage}
-                page={page}
+                page={currentPage}
                 slotProps={{
                     select: {
                         inputProps: {
@@ -86,8 +98,13 @@ export function MyTableFooter() {
                         native: true,
                     },
                 }}
-                onPageChange={handleChangePage}
+                onPageChange={(_, newPage) =>
+                    handleChangePage(newPage, rowsPerPage)
+                }
                 ActionsComponent={TablePaginationActions}
+                onRowsPerPageChange={(e) =>
+                    handleChangePage(0, Number(e.target.value))
+                }
             />
         </TableRow>
     );

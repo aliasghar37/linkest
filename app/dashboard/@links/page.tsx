@@ -9,7 +9,6 @@ import TableFooter from "@mui/material/TableFooter";
 import { MyTableFooter } from "@/components/TablePagination";
 import { Row } from "./Row";
 import prisma from "@/lib/prisma";
-import updateLink from "@/app/actions/handleLinkChange";
 
 export type Link = {
     id: string;
@@ -26,8 +25,23 @@ export type Link = {
     previewPage: boolean;
 };
 
-export default async function CollapsibleTable() {
-    const links = await prisma.link.findMany();
+export default async function CollapsibleTable({
+    searchParams,
+}: {
+    searchParams: Promise<{ page?: string; limit?: string }>;
+}) {
+    const params = await searchParams;
+    const page = Number(params.page) || 0;
+    const limit = Number(params.limit) || 10;
+
+    const [links, totalLinks] = await Promise.all([
+        prisma.link.findMany({
+            skip: page * 10,
+            take: limit,
+            orderBy: { createdAt: "desc" },
+        }),
+        prisma.link.count(),
+    ]);
 
     return (
         <TableContainer component={Paper}>
@@ -50,7 +64,11 @@ export default async function CollapsibleTable() {
                     ))}
                 </TableBody>
                 <TableFooter>
-                    <MyTableFooter />
+                    <MyTableFooter
+                        count={totalLinks}
+                        currentPage={page}
+                        rowsPerPage={limit}
+                    />
                 </TableFooter>
             </Table>
         </TableContainer>
