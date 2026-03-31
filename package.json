@@ -21,6 +21,7 @@
         "@mui/x-data-grid": "^8.27.0",
         "@prisma/client": "^6.19.2",
         "@tavily/core": "^0.7.2",
+        "date-fns": "^4.1.0",
         "groq-sdk": "^0.37.0",
         "next": "16.1.6",
         "prisma": "^6.19.2",

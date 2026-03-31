@@ -6,7 +6,6 @@ import { NextRequest } from "next/server";
 export async function POST(req: NextRequest) {
     try {
         const event = await verifyWebhook(req);
-        // console.log("Webhook payload:", event.data);
 
         const { id } = event.data;
 
@@ -24,9 +23,6 @@ export async function POST(req: NextRequest) {
                     role: "free",
                 },
             });
-
-            console.log("userId:", event.data.id);
-            console.log("prisma work done");
         }
 
         try {
@@ -34,7 +30,6 @@ export async function POST(req: NextRequest) {
             await client.users.updateUser(id as string, {
                 publicMetadata: { role: "free" },
             });
-            console.log("clerk work done");
         } catch (error) {
             throw new Error("Failed to set user role");
         }

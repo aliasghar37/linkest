@@ -30,7 +30,6 @@ const generateSummary = async (longUrl: string) => {
         const tvly = tavily({ apiKey: process.env.TAVILY_API });
         const responseTavily = await tvly.extract([longUrl]);
         const { title, rawContent } = responseTavily.results[0];
-        console.log("rawContent: >>>>>>))))", rawContent);
         const groq = new Groq({ apiKey: process.env.GROQ_API });
 
         const response = await groq.chat.completions.create({
@@ -60,7 +59,6 @@ const generateSummary = async (longUrl: string) => {
             temperature: 0.3,
         });
         const summary = response.choices[0]?.message?.content || null;
-        console.log("summary: >>>>>>))))", summary);
         return { summary, title };
     } catch (error) {
         console.error("Failed to generate summary:", error);

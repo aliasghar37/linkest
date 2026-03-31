@@ -72,7 +72,6 @@ export function MyTableFooter({
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
-    console.log(count, currentPage, rowsPerPage);
 
     const handleChangePage = (newPage: number, newLimit: number) => {
         const params = new URLSearchParams(searchParams.toString());

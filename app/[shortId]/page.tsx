@@ -22,12 +22,22 @@ export default async function RedirectPage({
         );
     }
 
-    prisma.link
-        .update({
-            where: { shortId },
-            data: { clicks: { increment: 1 } },
-        })
-        .catch((err) => console.error("Click tracking failed", err));
+    try {
+        await prisma.$transaction([
+            prisma.link.update({
+                where: { shortId },
+                data: { clicks: { increment: 1 } },
+            }),
+            prisma.click.create({
+                data: { linkId: link.id, timestamp: new Date() },
+            }),
+        ]);
+    } catch (err) {
+        console.error(
+            "Transaction failed, all changes rolled back. Could not update click data for link",
+            err,
+        );
+    }
 
     if (link.previewPage) {
         return <PreviewPage link={link} />;
