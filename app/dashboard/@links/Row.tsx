@@ -9,16 +9,16 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
-import { type Link } from "./page";
+import { type Link as LinkType } from "./page";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import CopyButton from "./CopyButton";
 import FormattedDate from "./FormatedDate";
-import { Switch } from "@mui/material";
+import { Link, Switch } from "@mui/material";
 import updateLink from "@/app/actions/handleLinkChange";
 import { useAlert } from "@/components/AlertContext";
 
-const handleDownloadQr = (link: Link) => {
+const handleDownloadQr = (link: LinkType) => {
     const linkElement = document.createElement("a");
     linkElement.href = link.qrCode;
     linkElement.download = `${link.shortId}.png`;
@@ -27,7 +27,7 @@ const handleDownloadQr = (link: Link) => {
     linkElement.remove();
 };
 
-export function Row({ link }: { link: Link }) {
+export function Row({ link }: { link: LinkType }) {
     const [status, setStatus] = useState(`${link.status}`);
     const [open, setOpen] = useState(false);
     const [checked, setChecked] = useState(link.previewPage);
@@ -107,7 +107,15 @@ export function Row({ link }: { link: Link }) {
                                 whiteSpace: "nowrap",
                             }}
                         >
-                            {link.shortUrl}
+                            <Link
+                                href={link.shortUrl}
+                                underline="hover"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                color="inherit"
+                            >
+                                {link.shortUrl}
+                            </Link>
                         </Box>
                         <Box component="span" className="short-url-copy-button">
                             <CopyButton url={link.shortUrl}></CopyButton>
@@ -146,7 +154,15 @@ export function Row({ link }: { link: Link }) {
                                 whiteSpace: "nowrap",
                             }}
                         >
-                            {link.longUrl}
+                            <Link
+                                href={link.longUrl}
+                                underline="hover"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                color="inherit"
+                            >
+                                {link.longUrl}
+                            </Link>
                         </Box>
                         <Box component="span" className="short-url-copy-button">
                             <CopyButton url={link.longUrl}></CopyButton>
