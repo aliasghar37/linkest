@@ -3,6 +3,7 @@
 import prisma from "@/lib/prisma";
 import { notFound, redirect } from "next/navigation";
 import PreviewPage from "./PreviewPage";
+import ShowError from "./ShowError";
 
 export default async function RedirectPage({
     params,
@@ -13,13 +14,11 @@ export default async function RedirectPage({
     const link = await prisma.link.findUnique({ where: { shortId } });
     if (!link) notFound();
     if (!link.status) {
-        return (
-            <div className="flex items-center justify-center min-h-screen">
-                <h1 className="text-2xl font-bold">
-                    This link has been disabled by the owner.
-                </h1>
-            </div>
-        );
+        return <ShowError message="Short URL has been disabled by the owner" />;
+    }
+
+    if (link.expiresAt && link.expiresAt < new Date()) {
+        return <ShowError message="Short URL has been expired" />;
     }
 
     try {
@@ -38,7 +37,6 @@ export default async function RedirectPage({
             err,
         );
     }
-
     if (link.previewPage) {
         return <PreviewPage link={link} />;
     }

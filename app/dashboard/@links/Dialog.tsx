@@ -3,17 +3,21 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import ExpiryDateTimePicker from "./DateAndTimePicker";
-import { setLinkExpiry } from "@/app/actions/setLinkExpiry";
+import { setLinkExpiry } from "@/app/actions/handleLinkExpiry";
 import type { Link } from "./page";
 import dayjs, { Dayjs } from "dayjs";
 import { useAlert } from "@/components/AlertContext";
+import { DialogContent } from "@mui/material";
+import { removeLinkExpiry } from "@/app/actions/handleLinkExpiry";
 
 export default function FormDialog({
     buttonType,
     link,
+    setHasExpiry,
 }: {
-    buttonType: "password" | "expiry";
+    buttonType: "password" | "setExpiry" | "removeExpiry";
     link: Link;
+    setHasExpiry: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState<Dayjs | null>(dayjs());
@@ -22,41 +26,82 @@ export default function FormDialog({
     const handleClickOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
+    const handleSetExpirySubmit = async (
+        event: SubmitEvent<HTMLFormElement>,
+    ) => {
         event.preventDefault();
         if (!value) return;
         const resp = await setLinkExpiry({
             shortId: link.shortId,
-            expiresAt: value.toISOString(),
+            expiry: value.toISOString(),
         });
-
+        handleClose();
         if (resp.error) showAlert("Could not set expiry to the URL", "error");
         if (resp.success) {
             showAlert(
                 "Expiry has been added to the URL successfully",
                 "success",
             );
+            setHasExpiry(true);
         }
-        handleClose();
     };
+
+    const handleRemoveExpirySubmit = async (
+        e: SubmitEvent<HTMLFormElement>,
+    ) => {
+        e.preventDefault();
+        if (!value) return;
+        const resp = await removeLinkExpiry({
+            shortId: link.shortId,
+            expiresAt: null,
+        });
+        handleClose();
+        if (resp.error)
+            showAlert("Could not remove expiry to the URL", "error");
+        if (resp.success) {
+            showAlert(
+                "Expiry has been removed to the URL successfully",
+                "success",
+            );
+            setHasExpiry(false);
+        }
+    };
+
     return (
         <>
             <Button
                 variant="outlined"
                 onClick={handleClickOpen}
                 size="small"
-                sx={{ minWidth: "100px", marginRight: "30px" }}
+                sx={{ minWidth: "120px", marginRight: "30px" }}
             >
-                {buttonType === "password" ? "Add Password" : "Add Auto Expiry"}
+                {buttonType === "removeExpiry"
+                    ? "Remove Auto Expiry"
+                    : "Add Auto Expiry"}
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                <form onSubmit={handleSubmit}>
-                    <ExpiryDateTimePicker value={value} onChange={setValue} />
-                    <DialogActions>
-                        <Button onClick={handleClose}>Cancel</Button>
-                        <Button type="submit">Done</Button>
-                    </DialogActions>
-                </form>
+                {buttonType === "removeExpiry" ? (
+                    <form onSubmit={handleRemoveExpirySubmit}>
+                        <DialogContent>
+                            This will remove "Auto Expiry"
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleClose}>Cancel</Button>
+                            <Button type="submit">Okay</Button>
+                        </DialogActions>
+                    </form>
+                ) : (
+                    <form onSubmit={handleSetExpirySubmit}>
+                        <ExpiryDateTimePicker
+                            value={value}
+                            onChange={setValue}
+                        />
+                        <DialogActions>
+                            <Button onClick={handleClose}>Cancel</Button>
+                            <Button type="submit">Done</Button>
+                        </DialogActions>
+                    </form>
+                )}
             </Dialog>
         </>
     );

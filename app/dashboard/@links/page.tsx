@@ -19,6 +19,7 @@ export type Link = {
     title: string;
     qrCode: string;
     createdAt: Date;
+    expiresAt?: Date | null;
     clicks: number;
     status: boolean;
     userId: string;

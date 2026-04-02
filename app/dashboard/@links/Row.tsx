@@ -14,10 +14,9 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import CopyButton from "./CopyButton";
 import FormattedDate from "./FormatedDate";
-import { Dialog, Link, Stack, Switch } from "@mui/material";
+import { Link, Stack, Switch } from "@mui/material";
 import updateLink from "@/app/actions/handleLinkChange";
 import { useAlert } from "@/components/AlertContext";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import FormDialog from "./Dialog";
 
 const handleDownloadQr = (link: LinkType) => {
@@ -33,6 +32,9 @@ export function Row({ link }: { link: LinkType }) {
     const [status, setStatus] = useState(`${link.status}`);
     const [open, setOpen] = useState(false);
     const [checked, setChecked] = useState(link.previewPage);
+    const [hasExpiry, setHasExpiry] = useState<boolean>(
+        Boolean(link.expiresAt),
+    );
     const { showAlert } = useAlert();
 
     const handleStatusChange = async (event: SelectChangeEvent) => {
@@ -257,14 +259,24 @@ export function Row({ link }: { link: LinkType }) {
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Stack direction={"row"}>
                             <Stack gap={2} alignSelf={"center"}>
-                                <FormDialog
-                                    buttonType="expiry"
-                                    link={link}
-                                ></FormDialog>
-                                <FormDialog
+                                {hasExpiry ? (
+                                    <FormDialog
+                                        buttonType="removeExpiry"
+                                        link={link}
+                                        setHasExpiry={setHasExpiry}
+                                    ></FormDialog>
+                                ) : (
+                                    <FormDialog
+                                        buttonType="setExpiry"
+                                        link={link}
+                                        setHasExpiry={setHasExpiry}
+                                    ></FormDialog>
+                                )}
+
+                                {/* <FormDialog
                                     buttonType="password"
                                     link={link}
-                                ></FormDialog>
+                                ></FormDialog> */}
                             </Stack>
                             <Box sx={{ margin: 1 }}>
                                 <Typography

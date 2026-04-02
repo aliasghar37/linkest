@@ -42,7 +42,7 @@ model Link {
     title       String
     qrCode      String
     createdAt   DateTime @default(now())
-    expiresAt   DateTime?
+    expiresAt   DateTime? or null
 
     clicks      Int     @default(0)
     clickData   Click[]
