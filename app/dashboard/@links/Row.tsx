@@ -14,9 +14,11 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import CopyButton from "./CopyButton";
 import FormattedDate from "./FormatedDate";
-import { Link, Switch } from "@mui/material";
+import { Dialog, Link, Stack, Switch } from "@mui/material";
 import updateLink from "@/app/actions/handleLinkChange";
 import { useAlert } from "@/components/AlertContext";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import FormDialog from "./Dialog";
 
 const handleDownloadQr = (link: LinkType) => {
     const linkElement = document.createElement("a");
@@ -61,7 +63,7 @@ export function Row({ link }: { link: LinkType }) {
     return (
         <Fragment>
             <TableRow>
-                <TableCell>
+                <TableCell sx={{ maxWidth: 36 }}>
                     <IconButton
                         aria-label="expand row"
                         size="small"
@@ -253,22 +255,34 @@ export function Row({ link }: { link: LinkType }) {
                     colSpan={8}
                 >
                     <Collapse in={open} timeout="auto" unmountOnExit>
-                        <Box sx={{ margin: 1 }}>
-                            <Typography
-                                variant="h6"
-                                gutterBottom
-                                component="div"
-                            >
-                                Summary
-                            </Typography>
-                            <Typography
-                                variant="body2"
-                                gutterBottom
-                                component="div"
-                            >
-                                {link.summary}
-                            </Typography>
-                        </Box>
+                        <Stack direction={"row"}>
+                            <Stack gap={2} alignSelf={"center"}>
+                                <FormDialog
+                                    buttonType="expiry"
+                                    link={link}
+                                ></FormDialog>
+                                <FormDialog
+                                    buttonType="password"
+                                    link={link}
+                                ></FormDialog>
+                            </Stack>
+                            <Box sx={{ margin: 1 }}>
+                                <Typography
+                                    variant="h6"
+                                    gutterBottom
+                                    component="div"
+                                >
+                                    Summary
+                                </Typography>
+                                <Typography
+                                    variant="body2"
+                                    gutterBottom
+                                    component="div"
+                                >
+                                    {link.summary}
+                                </Typography>
+                            </Box>
+                        </Stack>
                     </Collapse>
                 </TableCell>
             </TableRow>
