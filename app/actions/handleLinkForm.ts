@@ -5,6 +5,7 @@ import { auth, clerkClient } from "@clerk/nextjs/server";
 import QRCode from "qrcode";
 import { tavily } from "@tavily/core";
 import Groq from "groq-sdk";
+import { KeyObject } from "crypto";
 
 export type FormState = {
     error?: string;
@@ -120,28 +121,50 @@ export default async function shortenUrl(
         return { error: "Failed to sync user profile. Please try again." };
     }
 
-    const base62Chars = process.env.BASE_62_CHARACTERS as string;
-    let uniqueId = "";
-    try {
-        let { counter } = await getAndUpdateCounter();
-        if (!counter) return { error: "Couldn't get counter" };
-        while (counter > 0) {
-            if (counter === 0) {
-                uniqueId = base62Chars[0];
-            } else {
+    const inputAlias = formData.get("alias") as string;
+    const alias =
+        typeof inputAlias === "string" ? inputAlias.trim().toLowerCase() : "";
+
+    if (alias) {
+        if (alias.length < 3 || alias.length > 6)
+            return { error: "Alias must be 3 to 6 characters" };
+        if (/\s/.test(alias)) return { error: "Alias cannot contain spaces" };
+        if (!/^[a-z0-9_-]+$/.test(alias))
+            return {
+                error: "Alias can only contain lowercase letters, numbers, _ and -",
+            };
+
+        const hasShortId = await prisma.link.findUnique({
+            where: { shortId: alias },
+            select: { id: true },
+        });
+        if (hasShortId) {
+            return { error: "This alias already exists, try again" };
+        }
+    }
+
+    let uniqueId = alias;
+    if (!uniqueId) {
+        const base62Chars = process.env.BASE_62_CHARACTERS as string;
+        try {
+            let { counter } = await getAndUpdateCounter();
+            if (!counter) return { error: "Couldn't get counter" };
+            while (counter > 0) {
                 const index = counter % 62;
                 const char = base62Chars[index];
                 uniqueId = char + uniqueId;
                 counter = Math.floor(counter / 62);
             }
+        } catch {
+            return { error: "Failed to create short URL" };
         }
-    } catch {
-        return { error: "Failed to create short URL" };
+    } else {
+        uniqueId = alias;
     }
-    const domain = process.env.NEXT_PUBLIC_APP_URL;
-    const shortUrl = `${domain}/${uniqueId}`;
 
     try {
+        const domain = process.env.NEXT_PUBLIC_APP_URL;
+        const shortUrl = `${domain}/${uniqueId}`;
         const qrCode = await generateQR(shortUrl);
         const { summary, title } = await generateSummary(longUrl);
 

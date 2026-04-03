@@ -48,7 +48,7 @@ export default function Hero() {
                         service that streamlines your online experience. It also
                         helps you track your links.
                     </Typography>
-                    <LinkForm align="center" />
+                    <LinkForm align="center" page="home" />
                 </Stack>
             </Container>
         </Box>

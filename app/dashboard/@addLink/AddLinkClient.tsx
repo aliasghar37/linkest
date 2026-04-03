@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 export default function AddLinkClient() {
     const searchParams = useSearchParams();
     const [pendingUrl, setPendingUrl] = useState("");
+    const alias = "";
 
     useEffect(() => {
         const url = searchParams.get("pendingUrl");
@@ -17,5 +18,12 @@ export default function AddLinkClient() {
         }
     }, [searchParams]);
 
-    return <LinkForm align="start" initialValue={pendingUrl} />;
+    return (
+        <LinkForm
+            align="start"
+            initialValue={pendingUrl}
+            alias={alias}
+            page="dashboard"
+        />
+    );
 }
