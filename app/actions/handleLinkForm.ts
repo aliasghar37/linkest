@@ -5,7 +5,6 @@ import { auth, clerkClient } from "@clerk/nextjs/server";
 import QRCode from "qrcode";
 import { tavily } from "@tavily/core";
 import Groq from "groq-sdk";
-import { KeyObject } from "crypto";
 
 export type FormState = {
     error?: string;
@@ -168,24 +167,30 @@ export default async function shortenUrl(
         const qrCode = await generateQR(shortUrl);
         const { summary, title } = await generateSummary(longUrl);
 
-        await prisma.link.create({
-            data: {
-                shortId: uniqueId,
-                shortUrl,
-                longUrl,
-                qrCode,
-                user: {
-                    connect: {
-                        clerkId: userId,
+        await prisma.$transaction([
+            prisma.link.create({
+                data: {
+                    shortId: uniqueId,
+                    shortUrl,
+                    longUrl,
+                    qrCode,
+                    user: {
+                        connect: {
+                            clerkId: userId,
+                        },
                     },
+                    clicks: 0,
+                    status: true,
+                    summary: summary ?? "No summary available",
+                    title: title ?? "No title available",
+                    previewPage: true,
                 },
-                clicks: 0,
-                status: true,
-                summary: summary ?? "No summary available",
-                title: title ?? "No title available",
-                previewPage: true,
-            },
-        });
+            }),
+            prisma.user.update({
+                where: { clerkId: userId },
+                data: { linksCreated: { increment: 1 } },
+            }),
+        ]);
         // Cache in redis (ADD LATER)
 
         return { success: true, shortId: uniqueId };

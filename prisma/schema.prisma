@@ -29,6 +29,7 @@ model User {
     imageUrl    String
     role        Role        @default(free)
     links       Link[]
+    linksCreated    Int     @default(0)
     createdAt   DateTime    @default(now())
     updatedAt   DateTime    @updatedAt
 }
@@ -42,7 +43,7 @@ model Link {
     title       String
     qrCode      String
     createdAt   DateTime @default(now())
-    expiresAt   DateTime? or null
+    expiresAt   DateTime?
 
     clicks      Int     @default(0)
     clickData   Click[]

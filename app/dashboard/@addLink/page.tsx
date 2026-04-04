@@ -2,6 +2,7 @@ import AddLinkClient from "./AddLinkClient";
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
 import BasicCard from "@/components/BasicCard";
+import { stat } from "fs";
 
 type Stats = {
     links: number;
@@ -12,14 +13,20 @@ export default async function AddLink() {
     const { userId } = await auth();
     if (!userId) return { error: "Please sign in first", requiresAuth: true };
 
-    const result = await prisma.link.aggregate({
-        where: { userId },
-        _count: { _all: true },
-        _sum: { clicks: true },
-    });
+    const [user, clickAgg] = await prisma.$transaction([
+        prisma.user.findUnique({
+            where: { clerkId: userId },
+            select: { linksCreated: true },
+        }),
+        prisma.link.aggregate({
+            where: { userId },
+            _sum: { clicks: true },
+        }),
+    ]);
+
     const stats: Stats = {
-        links: result._count._all,
-        clicks: result._sum.clicks ?? 0,
+        links: user?.linksCreated ?? 0,
+        clicks: clickAgg._sum.clicks ?? 0,
     };
 
     return (
@@ -30,7 +37,7 @@ export default async function AddLink() {
             <div>
                 <AddLinkClient />
                 <div className="grid grid-cols-2 gap-4 pt-12 content-center ">
-                    <BasicCard label="Total Links" value={`${stats.links}`} />
+                    <BasicCard label="Links Created" value={`${stats.links}`} />
                     <BasicCard label="Total Clicks" value={`${stats.clicks}`} />
                 </div>
             </div>

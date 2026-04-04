@@ -9,6 +9,7 @@ import TableFooter from "@mui/material/TableFooter";
 import { MyTableFooter } from "@/components/TablePagination";
 import { Row } from "./Row";
 import prisma from "@/lib/prisma";
+import { auth } from "@clerk/nextjs/server";
 
 export type Link = {
     id: string;
@@ -34,9 +35,14 @@ export default async function CollapsibleTable({
     const params = await searchParams;
     const page = Number(params.page) || 0;
     const limit = Number(params.limit) || 10;
+    const { userId } = await auth();
+    if (!userId) {
+        return { error: "Please sign in first", requiresAuth: true };
+    }
 
     const [links, totalLinks] = await Promise.all([
         prisma.link.findMany({
+            where: { userId },
             skip: page * 10,
             take: limit,
             orderBy: { createdAt: "desc" },

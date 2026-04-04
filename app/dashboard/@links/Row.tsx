@@ -18,6 +18,7 @@ import { Link, Stack, Switch } from "@mui/material";
 import updateLink from "@/app/actions/handleLinkChange";
 import { useAlert } from "@/components/AlertContext";
 import FormDialog from "./Dialog";
+import DeleteButton from "./DeleteButton";
 
 const handleDownloadQr = (link: LinkType) => {
     const linkElement = document.createElement("a");
@@ -47,6 +48,7 @@ export function Row({ link }: { link: LinkType }) {
             status: boolStatus,
         });
         if (res) showAlert("URL Status has been changed", "success");
+        else showAlert("Couldn't update the URL status", "error");
     };
 
     const handleChecked = async (
@@ -60,23 +62,28 @@ export function Row({ link }: { link: LinkType }) {
             previewPage: event.target.checked,
         });
         if (res) showAlert("URL Preview Page has been changed", "success");
+        else showAlert("Couldn't update the URL preview page", "error");
     };
 
     return (
         <Fragment>
             <TableRow>
-                <TableCell sx={{ maxWidth: 36 }}>
-                    <IconButton
-                        aria-label="expand row"
-                        size="small"
-                        onClick={() => setOpen(!open)}
-                    >
-                        {open ? (
-                            <KeyboardArrowUpIcon />
-                        ) : (
-                            <KeyboardArrowDownIcon />
-                        )}
-                    </IconButton>
+                <TableCell sx={{ maxWidth: 66, direction: "column" }}>
+                    <Stack sx={{display: "flex", alignItems: "center", justifyContent: "center"}} > 
+                        <DeleteButton link={link} />
+                        <IconButton
+                            aria-label="expand row"
+                            size="small"
+                            // sx={{ width: "fit-content" }}
+                            onClick={() => setOpen(!open)}
+                        >
+                            {open ? (
+                                <KeyboardArrowUpIcon />
+                            ) : (
+                                <KeyboardArrowDownIcon />
+                            )}
+                        </IconButton>
+                    </Stack>
                 </TableCell>
                 <TableCell
                     component="th"

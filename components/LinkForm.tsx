@@ -50,6 +50,8 @@ export default function LinkForm({
             showAlert(state?.error, "error");
         } else if (state.success && state.shortId) {
             setInputValue("");
+            setInputAlias("");
+            setError(false);
             showAlert("Your link has been shortened successfully", "success");
             router.push(`/dashboard`);
         }

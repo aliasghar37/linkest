@@ -20,8 +20,18 @@ export type UserModel = runtime.Types.Result.DefaultSelection<Prisma.$UserPayloa
 
 export type AggregateUser = {
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
+}
+
+export type UserAvgAggregateOutputType = {
+  linksCreated: number | null
+}
+
+export type UserSumAggregateOutputType = {
+  linksCreated: number | null
 }
 
 export type UserMinAggregateOutputType = {
@@ -32,6 +42,7 @@ export type UserMinAggregateOutputType = {
   lastName: string | null
   imageUrl: string | null
   role: $Enums.Role | null
+  linksCreated: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -44,6 +55,7 @@ export type UserMaxAggregateOutputType = {
   lastName: string | null
   imageUrl: string | null
   role: $Enums.Role | null
+  linksCreated: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -56,11 +68,20 @@ export type UserCountAggregateOutputType = {
   lastName: number
   imageUrl: number
   role: number
+  linksCreated: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
+
+export type UserAvgAggregateInputType = {
+  linksCreated?: true
+}
+
+export type UserSumAggregateInputType = {
+  linksCreated?: true
+}
 
 export type UserMinAggregateInputType = {
   id?: true
@@ -70,6 +91,7 @@ export type UserMinAggregateInputType = {
   lastName?: true
   imageUrl?: true
   role?: true
+  linksCreated?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -82,6 +104,7 @@ export type UserMaxAggregateInputType = {
   lastName?: true
   imageUrl?: true
   role?: true
+  linksCreated?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -94,6 +117,7 @@ export type UserCountAggregateInputType = {
   lastName?: true
   imageUrl?: true
   role?: true
+  linksCreated?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -137,6 +161,18 @@ export type UserAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: UserAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: UserSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: UserMinAggregateInputType
@@ -167,6 +203,8 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   _count?: UserCountAggregateInputType | true
+  _avg?: UserAvgAggregateInputType
+  _sum?: UserSumAggregateInputType
   _min?: UserMinAggregateInputType
   _max?: UserMaxAggregateInputType
 }
@@ -179,9 +217,12 @@ export type UserGroupByOutputType = {
   lastName: string
   imageUrl: string
   role: $Enums.Role
+  linksCreated: number
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
 }
@@ -212,6 +253,7 @@ export type UserWhereInput = {
   lastName?: Prisma.StringFilter<"User"> | string
   imageUrl?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
+  linksCreated?: Prisma.IntFilter<"User"> | number
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   links?: Prisma.LinkListRelationFilter
@@ -225,6 +267,7 @@ export type UserOrderByWithRelationInput = {
   lastName?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  linksCreated?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   links?: Prisma.LinkOrderByRelationAggregateInput
@@ -241,6 +284,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   lastName?: Prisma.StringFilter<"User"> | string
   imageUrl?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
+  linksCreated?: Prisma.IntFilter<"User"> | number
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   links?: Prisma.LinkListRelationFilter
@@ -254,11 +298,14 @@ export type UserOrderByWithAggregationInput = {
   lastName?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  linksCreated?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
+  _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
+  _sum?: Prisma.UserSumOrderByAggregateInput
 }
 
 export type UserScalarWhereWithAggregatesInput = {
@@ -272,6 +319,7 @@ export type UserScalarWhereWithAggregatesInput = {
   lastName?: Prisma.StringWithAggregatesFilter<"User"> | string
   imageUrl?: Prisma.StringWithAggregatesFilter<"User"> | string
   role?: Prisma.EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
+  linksCreated?: Prisma.IntWithAggregatesFilter<"User"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -284,6 +332,7 @@ export type UserCreateInput = {
   lastName: string
   imageUrl: string
   role?: $Enums.Role
+  linksCreated?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   links?: Prisma.LinkCreateNestedManyWithoutUserInput
@@ -297,6 +346,7 @@ export type UserUncheckedCreateInput = {
   lastName: string
   imageUrl: string
   role?: $Enums.Role
+  linksCreated?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   links?: Prisma.LinkUncheckedCreateNestedManyWithoutUserInput
@@ -309,6 +359,7 @@ export type UserUpdateInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  linksCreated?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   links?: Prisma.LinkUpdateManyWithoutUserNestedInput
@@ -321,6 +372,7 @@ export type UserUncheckedUpdateInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  linksCreated?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   links?: Prisma.LinkUncheckedUpdateManyWithoutUserNestedInput
@@ -334,6 +386,7 @@ export type UserCreateManyInput = {
   lastName: string
   imageUrl: string
   role?: $Enums.Role
+  linksCreated?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -345,6 +398,7 @@ export type UserUpdateManyMutationInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  linksCreated?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -356,6 +410,7 @@ export type UserUncheckedUpdateManyInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  linksCreated?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -368,8 +423,13 @@ export type UserCountOrderByAggregateInput = {
   lastName?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  linksCreated?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type UserAvgOrderByAggregateInput = {
+  linksCreated?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -380,6 +440,7 @@ export type UserMaxOrderByAggregateInput = {
   lastName?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  linksCreated?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -392,8 +453,13 @@ export type UserMinOrderByAggregateInput = {
   lastName?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  linksCreated?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type UserSumOrderByAggregateInput = {
+  linksCreated?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -407,6 +473,14 @@ export type StringFieldUpdateOperationsInput = {
 
 export type EnumRoleFieldUpdateOperationsInput = {
   set?: $Enums.Role
+}
+
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -435,6 +509,7 @@ export type UserCreateWithoutLinksInput = {
   lastName: string
   imageUrl: string
   role?: $Enums.Role
+  linksCreated?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -447,6 +522,7 @@ export type UserUncheckedCreateWithoutLinksInput = {
   lastName: string
   imageUrl: string
   role?: $Enums.Role
+  linksCreated?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -474,6 +550,7 @@ export type UserUpdateWithoutLinksInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  linksCreated?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -485,6 +562,7 @@ export type UserUncheckedUpdateWithoutLinksInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  linksCreated?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -528,6 +606,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   lastName?: boolean
   imageUrl?: boolean
   role?: boolean
+  linksCreated?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   links?: boolean | Prisma.User$linksArgs<ExtArgs>
@@ -544,11 +623,12 @@ export type UserSelectScalar = {
   lastName?: boolean
   imageUrl?: boolean
   role?: boolean
+  linksCreated?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clerkId" | "email" | "firstName" | "lastName" | "imageUrl" | "role" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clerkId" | "email" | "firstName" | "lastName" | "imageUrl" | "role" | "linksCreated" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   links?: boolean | Prisma.User$linksArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -567,6 +647,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     lastName: string
     imageUrl: string
     role: $Enums.Role
+    linksCreated: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -969,6 +1050,7 @@ export interface UserFieldRefs {
   readonly lastName: Prisma.FieldRef<"User", 'String'>
   readonly imageUrl: Prisma.FieldRef<"User", 'String'>
   readonly role: Prisma.FieldRef<"User", 'Role'>
+  readonly linksCreated: Prisma.FieldRef<"User", 'Int'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }
