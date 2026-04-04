@@ -38,6 +38,9 @@ export function Row({ link }: { link: LinkType }) {
     const [hasExpiry, setHasExpiry] = useState<boolean>(
         Boolean(link.expiresAt),
     );
+    const [hasPassword, setHasPassword] = useState<boolean>(
+        Boolean(link.password),
+    );
     const { showAlert } = useAlert();
 
     const handleStatusChange = async (event: SelectChangeEvent) => {
@@ -49,7 +52,7 @@ export function Row({ link }: { link: LinkType }) {
             shortId: link.shortId,
             status: boolStatus,
         });
-        if (res) showAlert("URL Status has been changed", "success");
+        if (res.count) showAlert("URL Status has been changed", "success");
         else showAlert("Couldn't update the URL status", "error");
     };
 
@@ -290,10 +293,19 @@ export function Row({ link }: { link: LinkType }) {
                                     ></SetExpiry>
                                 )}
 
-                                <SetPassword
-                                    buttonType="addPassword"
-                                    link={link}
-                                />
+                                {hasPassword ? (
+                                    <SetPassword
+                                        buttonType="removePassword"
+                                        shortId={link.shortId}
+                                        setHasPassword={setHasPassword}
+                                    />
+                                ) : (
+                                    <SetPassword
+                                        buttonType="addPassword"
+                                        shortId={link.shortId}
+                                        setHasPassword={setHasPassword}
+                                    />
+                                )}
                             </Stack>
                             <Box sx={{ margin: 1 }}>
                                 <Typography

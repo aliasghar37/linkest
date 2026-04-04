@@ -16,15 +16,22 @@ export async function setLinkExpiry({
     const expiresAt = new Date(expiry);
 
     try {
-        await prisma.link.update({
-            where: { shortId: shortId, userId },
+        const link = await prisma.link.findUnique({
+            where: { shortId },
+            select: { id: true, userId: true },
+        });
+        if (!link || link.userId !== userId)
+            return { error: "Couldn't find link or unauthorized usre" };
+        const res = await prisma.link.update({
+            where: { shortId: shortId },
             data: { expiresAt },
         });
+        revalidatePath("/dashboard");
+        if (res.id) return { success: true };
     } catch (err) {
-        throw new Error("Could not set expiry to the URL");
+        console.error("Failed to edit summary:", err);
+        return { error: "Couldn't set expiry to the Link" };
     }
-    revalidatePath("/dashboard");
-    return { success: true };
 }
 
 export async function removeLinkExpiry({
@@ -42,9 +49,10 @@ export async function removeLinkExpiry({
             where: { shortId, userId },
             data: { expiresAt },
         });
+        revalidatePath("/dashboard");
+        return { success: true };
     } catch (err) {
-        throw new Error("Could not remove expiry from the URL");
+        console.error("Failed to edit summary:", err);
+        return { error: "Couldn't remove link expiry" };
     }
-    revalidatePath("/dashboard");
-    return { success: true };
 }

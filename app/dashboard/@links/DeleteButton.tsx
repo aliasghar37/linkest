@@ -33,7 +33,7 @@ export default function DeleteButton({ link }: { link: Link }) {
 
     return (
         <>
-            <IconButton onClick={handleClickOpen} size="small">
+            <IconButton onClick={handleClickOpen} size="medium">
                 <DeleteForeverIcon color="error" fontSize="small" />
             </IconButton>
             <Dialog open={open} onClose={handleClose}>

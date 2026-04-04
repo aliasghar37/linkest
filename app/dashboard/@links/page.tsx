@@ -25,7 +25,7 @@ export type Link = {
     status: boolean;
     userId: string;
     previewPage: boolean;
-    password?: string;
+    password?: string | null;
 };
 
 export default async function CollapsibleTable({

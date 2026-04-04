@@ -2,7 +2,6 @@ import AddLinkClient from "./AddLinkClient";
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
 import BasicCard from "@/components/BasicCard";
-import { stat } from "fs";
 
 type Stats = {
     links: number;

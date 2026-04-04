@@ -5,10 +5,7 @@ import bcrypt from "bcrypt";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 
-export default async function addPassword(
-    shortId: string,
-    rawPassword: string,
-) {
+export async function addPassword(shortId: string, rawPassword: string) {
     const { userId } = await auth();
     if (!userId) return { error: "Please sign in first", requiresAuth: true };
     if (typeof rawPassword !== "string")
@@ -36,5 +33,28 @@ export default async function addPassword(
     } catch (error) {
         console.error("Failed to set password:", error);
         return { error: "Couldn't set password" };
+    }
+}
+
+export async function removePassword(shortId: string) {
+    const { userId } = await auth();
+    if (!userId)
+        return { error: "Please sign in to continue", requiresAuth: true };
+
+    try {
+        const link = await prisma.link.findUnique({
+            where: { shortId },
+        });
+        if (!link || link.userId !== userId)
+            return { error: "Couldn't find link or unauthorized usre" };
+        const resp = await prisma.link.update({
+            where: { id: link.id },
+            data: { password: null },
+        });
+        revalidatePath("/dashboard");
+        if (resp.id) return { success: true };
+    } catch (err) {
+        console.error("Failed to remove password:", err);
+        return { error: "Couldn't remove the link password" };
     }
 }

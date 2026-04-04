@@ -1,4 +1,4 @@
-import { useState, SubmitEvent } from "react";
+import { useState, SubmitEvent, Dispatch, SetStateAction } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -17,7 +17,7 @@ export default function SetExpiry({
 }: {
     buttonType: "password" | "setExpiry" | "removeExpiry";
     link: Link;
-    setHasExpiry: React.Dispatch<React.SetStateAction<boolean>>;
+    setHasExpiry: Dispatch<SetStateAction<boolean>>;
 }) {
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState<Dayjs | null>(dayjs());
@@ -36,8 +36,9 @@ export default function SetExpiry({
             expiry: value.toISOString(),
         });
         handleClose();
-        if (resp.error) showAlert("Could not set expiry to the URL", "error");
-        if (resp.success) {
+        if (resp?.error || resp?.requiresAuth)
+            showAlert("Could not set expiry to the URL", "error");
+        if (resp?.success) {
             showAlert(
                 "Expiry has been added to the URL successfully",
                 "success",
