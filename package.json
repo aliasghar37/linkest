@@ -22,6 +22,8 @@
         "@mui/x-date-pickers": "^8.27.2",
         "@prisma/client": "^6.19.2",
         "@tavily/core": "^0.7.2",
+        "@types/bcrypt": "^6.0.0",
+        "bcrypt": "^6.0.0",
         "date-fns": "^4.1.0",
         "dayjs": "^1.11.20",
         "groq-sdk": "^0.37.0",

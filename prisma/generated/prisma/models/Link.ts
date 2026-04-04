@@ -44,6 +44,7 @@ export type LinkMinAggregateOutputType = {
   qrCode: string | null
   createdAt: Date | null
   expiresAt: Date | null
+  password: string | null
   clicks: number | null
   status: boolean | null
   previewPage: boolean | null
@@ -60,6 +61,7 @@ export type LinkMaxAggregateOutputType = {
   qrCode: string | null
   createdAt: Date | null
   expiresAt: Date | null
+  password: string | null
   clicks: number | null
   status: boolean | null
   previewPage: boolean | null
@@ -76,6 +78,7 @@ export type LinkCountAggregateOutputType = {
   qrCode: number
   createdAt: number
   expiresAt: number
+  password: number
   clicks: number
   status: number
   previewPage: number
@@ -102,6 +105,7 @@ export type LinkMinAggregateInputType = {
   qrCode?: true
   createdAt?: true
   expiresAt?: true
+  password?: true
   clicks?: true
   status?: true
   previewPage?: true
@@ -118,6 +122,7 @@ export type LinkMaxAggregateInputType = {
   qrCode?: true
   createdAt?: true
   expiresAt?: true
+  password?: true
   clicks?: true
   status?: true
   previewPage?: true
@@ -134,6 +139,7 @@ export type LinkCountAggregateInputType = {
   qrCode?: true
   createdAt?: true
   expiresAt?: true
+  password?: true
   clicks?: true
   status?: true
   previewPage?: true
@@ -237,6 +243,7 @@ export type LinkGroupByOutputType = {
   qrCode: string
   createdAt: Date
   expiresAt: Date | null
+  password: string | null
   clicks: number
   status: boolean
   previewPage: boolean
@@ -276,6 +283,7 @@ export type LinkWhereInput = {
   qrCode?: Prisma.StringFilter<"Link"> | string
   createdAt?: Prisma.DateTimeFilter<"Link"> | Date | string
   expiresAt?: Prisma.DateTimeNullableFilter<"Link"> | Date | string | null
+  password?: Prisma.StringNullableFilter<"Link"> | string | null
   clicks?: Prisma.IntFilter<"Link"> | number
   status?: Prisma.BoolFilter<"Link"> | boolean
   previewPage?: Prisma.BoolFilter<"Link"> | boolean
@@ -294,6 +302,7 @@ export type LinkOrderByWithRelationInput = {
   qrCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
+  password?: Prisma.SortOrder
   clicks?: Prisma.SortOrder
   status?: Prisma.SortOrder
   previewPage?: Prisma.SortOrder
@@ -315,6 +324,7 @@ export type LinkWhereUniqueInput = Prisma.AtLeast<{
   qrCode?: Prisma.StringFilter<"Link"> | string
   createdAt?: Prisma.DateTimeFilter<"Link"> | Date | string
   expiresAt?: Prisma.DateTimeNullableFilter<"Link"> | Date | string | null
+  password?: Prisma.StringNullableFilter<"Link"> | string | null
   clicks?: Prisma.IntFilter<"Link"> | number
   status?: Prisma.BoolFilter<"Link"> | boolean
   previewPage?: Prisma.BoolFilter<"Link"> | boolean
@@ -333,6 +343,7 @@ export type LinkOrderByWithAggregationInput = {
   qrCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
+  password?: Prisma.SortOrder
   clicks?: Prisma.SortOrder
   status?: Prisma.SortOrder
   previewPage?: Prisma.SortOrder
@@ -357,6 +368,7 @@ export type LinkScalarWhereWithAggregatesInput = {
   qrCode?: Prisma.StringWithAggregatesFilter<"Link"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Link"> | Date | string
   expiresAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Link"> | Date | string | null
+  password?: Prisma.StringNullableWithAggregatesFilter<"Link"> | string | null
   clicks?: Prisma.IntWithAggregatesFilter<"Link"> | number
   status?: Prisma.BoolWithAggregatesFilter<"Link"> | boolean
   previewPage?: Prisma.BoolWithAggregatesFilter<"Link"> | boolean
@@ -373,6 +385,7 @@ export type LinkCreateInput = {
   qrCode: string
   createdAt?: Date | string
   expiresAt?: Date | string | null
+  password?: string | null
   clicks?: number
   status?: boolean
   previewPage?: boolean
@@ -390,6 +403,7 @@ export type LinkUncheckedCreateInput = {
   qrCode: string
   createdAt?: Date | string
   expiresAt?: Date | string | null
+  password?: string | null
   clicks?: number
   status?: boolean
   previewPage?: boolean
@@ -406,6 +420,7 @@ export type LinkUpdateInput = {
   qrCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clicks?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.BoolFieldUpdateOperationsInput | boolean
   previewPage?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -422,6 +437,7 @@ export type LinkUncheckedUpdateInput = {
   qrCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clicks?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.BoolFieldUpdateOperationsInput | boolean
   previewPage?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -439,6 +455,7 @@ export type LinkCreateManyInput = {
   qrCode: string
   createdAt?: Date | string
   expiresAt?: Date | string | null
+  password?: string | null
   clicks?: number
   status?: boolean
   previewPage?: boolean
@@ -454,6 +471,7 @@ export type LinkUpdateManyMutationInput = {
   qrCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clicks?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.BoolFieldUpdateOperationsInput | boolean
   previewPage?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -468,6 +486,7 @@ export type LinkUncheckedUpdateManyInput = {
   qrCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clicks?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.BoolFieldUpdateOperationsInput | boolean
   previewPage?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -494,6 +513,7 @@ export type LinkCountOrderByAggregateInput = {
   qrCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
+  password?: Prisma.SortOrder
   clicks?: Prisma.SortOrder
   status?: Prisma.SortOrder
   previewPage?: Prisma.SortOrder
@@ -514,6 +534,7 @@ export type LinkMaxOrderByAggregateInput = {
   qrCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
+  password?: Prisma.SortOrder
   clicks?: Prisma.SortOrder
   status?: Prisma.SortOrder
   previewPage?: Prisma.SortOrder
@@ -530,6 +551,7 @@ export type LinkMinOrderByAggregateInput = {
   qrCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
+  password?: Prisma.SortOrder
   clicks?: Prisma.SortOrder
   status?: Prisma.SortOrder
   previewPage?: Prisma.SortOrder
@@ -592,6 +614,11 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
   unset?: boolean
 }
 
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+  unset?: boolean
+}
+
 export type BoolFieldUpdateOperationsInput = {
   set?: boolean
 }
@@ -620,6 +647,7 @@ export type LinkCreateWithoutUserInput = {
   qrCode: string
   createdAt?: Date | string
   expiresAt?: Date | string | null
+  password?: string | null
   clicks?: number
   status?: boolean
   previewPage?: boolean
@@ -636,6 +664,7 @@ export type LinkUncheckedCreateWithoutUserInput = {
   qrCode: string
   createdAt?: Date | string
   expiresAt?: Date | string | null
+  password?: string | null
   clicks?: number
   status?: boolean
   previewPage?: boolean
@@ -680,6 +709,7 @@ export type LinkScalarWhereInput = {
   qrCode?: Prisma.StringFilter<"Link"> | string
   createdAt?: Prisma.DateTimeFilter<"Link"> | Date | string
   expiresAt?: Prisma.DateTimeNullableFilter<"Link"> | Date | string | null
+  password?: Prisma.StringNullableFilter<"Link"> | string | null
   clicks?: Prisma.IntFilter<"Link"> | number
   status?: Prisma.BoolFilter<"Link"> | boolean
   previewPage?: Prisma.BoolFilter<"Link"> | boolean
@@ -696,6 +726,7 @@ export type LinkCreateWithoutClickDataInput = {
   qrCode: string
   createdAt?: Date | string
   expiresAt?: Date | string | null
+  password?: string | null
   clicks?: number
   status?: boolean
   previewPage?: boolean
@@ -712,6 +743,7 @@ export type LinkUncheckedCreateWithoutClickDataInput = {
   qrCode: string
   createdAt?: Date | string
   expiresAt?: Date | string | null
+  password?: string | null
   clicks?: number
   status?: boolean
   previewPage?: boolean
@@ -743,6 +775,7 @@ export type LinkUpdateWithoutClickDataInput = {
   qrCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clicks?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.BoolFieldUpdateOperationsInput | boolean
   previewPage?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -758,6 +791,7 @@ export type LinkUncheckedUpdateWithoutClickDataInput = {
   qrCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clicks?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.BoolFieldUpdateOperationsInput | boolean
   previewPage?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -774,6 +808,7 @@ export type LinkCreateManyUserInput = {
   qrCode: string
   createdAt?: Date | string
   expiresAt?: Date | string | null
+  password?: string | null
   clicks?: number
   status?: boolean
   previewPage?: boolean
@@ -788,6 +823,7 @@ export type LinkUpdateWithoutUserInput = {
   qrCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clicks?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.BoolFieldUpdateOperationsInput | boolean
   previewPage?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -803,6 +839,7 @@ export type LinkUncheckedUpdateWithoutUserInput = {
   qrCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clicks?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.BoolFieldUpdateOperationsInput | boolean
   previewPage?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -818,6 +855,7 @@ export type LinkUncheckedUpdateManyWithoutUserInput = {
   qrCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clicks?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.BoolFieldUpdateOperationsInput | boolean
   previewPage?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -864,6 +902,7 @@ export type LinkSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   qrCode?: boolean
   createdAt?: boolean
   expiresAt?: boolean
+  password?: boolean
   clicks?: boolean
   status?: boolean
   previewPage?: boolean
@@ -885,13 +924,14 @@ export type LinkSelectScalar = {
   qrCode?: boolean
   createdAt?: boolean
   expiresAt?: boolean
+  password?: boolean
   clicks?: boolean
   status?: boolean
   previewPage?: boolean
   userId?: boolean
 }
 
-export type LinkOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "shortId" | "shortUrl" | "longUrl" | "summary" | "title" | "qrCode" | "createdAt" | "expiresAt" | "clicks" | "status" | "previewPage" | "userId", ExtArgs["result"]["link"]>
+export type LinkOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "shortId" | "shortUrl" | "longUrl" | "summary" | "title" | "qrCode" | "createdAt" | "expiresAt" | "password" | "clicks" | "status" | "previewPage" | "userId", ExtArgs["result"]["link"]>
 export type LinkInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   clickData?: boolean | Prisma.Link$clickDataArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -914,6 +954,7 @@ export type $LinkPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     qrCode: string
     createdAt: Date
     expiresAt: Date | null
+    password: string | null
     clicks: number
     status: boolean
     previewPage: boolean
@@ -1321,6 +1362,7 @@ export interface LinkFieldRefs {
   readonly qrCode: Prisma.FieldRef<"Link", 'String'>
   readonly createdAt: Prisma.FieldRef<"Link", 'DateTime'>
   readonly expiresAt: Prisma.FieldRef<"Link", 'DateTime'>
+  readonly password: Prisma.FieldRef<"Link", 'String'>
   readonly clicks: Prisma.FieldRef<"Link", 'Int'>
   readonly status: Prisma.FieldRef<"Link", 'Boolean'>
   readonly previewPage: Prisma.FieldRef<"Link", 'Boolean'>

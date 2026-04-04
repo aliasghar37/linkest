@@ -10,7 +10,7 @@ import { useAlert } from "@/components/AlertContext";
 import { DialogContent } from "@mui/material";
 import { removeLinkExpiry } from "@/app/actions/handleLinkExpiry";
 
-export default function FormDialog({
+export default function SetExpiry({
     buttonType,
     link,
     setHasExpiry,

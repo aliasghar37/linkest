@@ -17,9 +17,10 @@ import FormattedDate from "./FormatedDate";
 import { Link, Stack, Switch } from "@mui/material";
 import updateLink from "@/app/actions/handleLinkChange";
 import { useAlert } from "@/components/AlertContext";
-import FormDialog from "./Dialog";
+import SetExpiry from "./SetExpiry";
 import DeleteButton from "./DeleteButton";
 import EditSummaryButton from "./EditSummary";
+import SetPassword from "./SetPassword";
 
 const handleDownloadQr = (link: LinkType) => {
     const linkElement = document.createElement("a");
@@ -276,23 +277,23 @@ export function Row({ link }: { link: LinkType }) {
                         <Stack direction={"row"}>
                             <Stack gap={2} alignSelf={"center"}>
                                 {hasExpiry ? (
-                                    <FormDialog
+                                    <SetExpiry
                                         buttonType="removeExpiry"
                                         link={link}
                                         setHasExpiry={setHasExpiry}
-                                    ></FormDialog>
+                                    ></SetExpiry>
                                 ) : (
-                                    <FormDialog
+                                    <SetExpiry
                                         buttonType="setExpiry"
                                         link={link}
                                         setHasExpiry={setHasExpiry}
-                                    ></FormDialog>
+                                    ></SetExpiry>
                                 )}
 
-                                {/* <FormDialog
-                                    buttonType="password"
+                                <SetPassword
+                                    buttonType="addPassword"
                                     link={link}
-                                ></FormDialog> */}
+                                />
                             </Stack>
                             <Box sx={{ margin: 1 }}>
                                 <Typography

@@ -85,10 +85,14 @@ export default function LinkForm({
 
         const isInvalid = aliasValue.length < 3 || aliasValue.length > 6;
         setError(isInvalid);
-
+        if (errorTimerRef.current) {
+            clearTimeout(errorTimerRef.current);
+            errorTimerRef.current = null;
+        }
         if (isInvalid) {
             errorTimerRef.current = setTimeout(() => {
                 setError(false);
+                errorTimerRef.current = null;
             }, 4000);
         }
     };

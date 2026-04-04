@@ -44,6 +44,7 @@ model Link {
     qrCode      String
     createdAt   DateTime @default(now())
     expiresAt   DateTime?
+    password    String?
 
     clicks      Int     @default(0)
     clickData   Click[]

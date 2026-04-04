@@ -752,6 +752,7 @@ export const LinkScalarFieldEnum = {
   qrCode: 'qrCode',
   createdAt: 'createdAt',
   expiresAt: 'expiresAt',
+  password: 'password',
   clicks: 'clicks',
   status: 'status',
   previewPage: 'previewPage',
