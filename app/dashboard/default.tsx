@@ -1,3 +1,5 @@
+import { CircularProgress } from "@mui/material";
+
 export default function () {
-    return <h1>Loading...</h1>;
+    return <CircularProgress />;
 }

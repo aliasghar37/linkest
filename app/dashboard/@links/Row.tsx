@@ -19,6 +19,7 @@ import updateLink from "@/app/actions/handleLinkChange";
 import { useAlert } from "@/components/AlertContext";
 import FormDialog from "./Dialog";
 import DeleteButton from "./DeleteButton";
+import EditSummaryButton from "./EditSummary";
 
 const handleDownloadQr = (link: LinkType) => {
     const linkElement = document.createElement("a");
@@ -69,7 +70,13 @@ export function Row({ link }: { link: LinkType }) {
         <Fragment>
             <TableRow>
                 <TableCell sx={{ maxWidth: 66, direction: "column" }}>
-                    <Stack sx={{display: "flex", alignItems: "center", justifyContent: "center"}} > 
+                    <Stack
+                        sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }}
+                    >
                         <DeleteButton link={link} />
                         <IconButton
                             aria-label="expand row"
@@ -92,13 +99,14 @@ export function Row({ link }: { link: LinkType }) {
                         maxWidth: "150px",
                         overflow: "hidden",
                         "& .short-url-copy-button": {
-                            opacity: 0,
-                            pointerEvents: "none",
-                            transition: "opacity 0.2s ease",
+                            md: {
+                                opacity: 0,
+                                pointerEvents: "none",
+                                transition: "opacity 0.2s ease",
+                            },
                         },
                         "&:hover .short-url-copy-button": {
-                            opacity: 1,
-                            pointerEvents: "auto",
+                            md: { opacity: 1, pointerEvents: "auto" },
                         },
                     }}
                 >
@@ -139,13 +147,14 @@ export function Row({ link }: { link: LinkType }) {
                         maxWidth: "150px",
                         overflow: "hidden",
                         "& .short-url-copy-button": {
-                            opacity: 0,
-                            pointerEvents: "none",
-                            transition: "opacity 0.2s ease",
+                            md: {
+                                opacity: 0,
+                                pointerEvents: "none",
+                                transition: "opacity 0.2s ease",
+                            },
                         },
                         "&:hover .short-url-copy-button": {
-                            opacity: 1,
-                            pointerEvents: "auto",
+                            md: { opacity: 1, pointerEvents: "auto" },
                         },
                     }}
                 >
@@ -292,6 +301,7 @@ export function Row({ link }: { link: LinkType }) {
                                     component="div"
                                 >
                                     Summary
+                                    <EditSummaryButton link={link} />
                                 </Typography>
                                 <Typography
                                     variant="body2"
