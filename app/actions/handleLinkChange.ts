@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { auth } from "@clerk/nextjs/server";
 
 type LinkData = {
     userId: string;
@@ -10,14 +11,16 @@ type LinkData = {
 };
 
 export default async function updateLink({
-    userId,
     shortId,
     previewPage,
     status,
 }: LinkData) {
+    const { userId } = await auth();
+    if (!userId) return { error: "Please sign in first", requiresAuth: true };
+
     const response = await prisma.link.updateMany({
         where: { userId, shortId },
         data: { previewPage, status },
     });
-    return response;
+    if (response.count) return { success: true };
 }

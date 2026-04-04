@@ -48,7 +48,7 @@ export default async function CollapsibleTable({
             take: limit,
             orderBy: { createdAt: "desc" },
         }),
-        prisma.link.count(),
+        prisma.link.count({ where: { userId } }),
     ]);
 
     return (

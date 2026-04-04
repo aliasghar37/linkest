@@ -52,8 +52,9 @@ export function Row({ link }: { link: LinkType }) {
             shortId: link.shortId,
             status: boolStatus,
         });
-        if (res.count) showAlert("URL Status has been changed", "success");
-        else showAlert("Couldn't update the URL status", "error");
+        if (res?.error || res?.requiresAuth)
+            showAlert("Couldn't update the URL status", "error");
+        else showAlert("URL Status has been changed", "success");
     };
 
     const handleChecked = async (
