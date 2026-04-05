@@ -48,7 +48,7 @@ export default function EditSummaryButton({ link }: { link: Link }) {
                         width: { sm: "500px", md: "500px", xs: "280px" },
                     }}
                 >
-                    <form onSubmit={handleSubmit} id="subscription-form">
+                    <form onSubmit={handleSubmit}>
                         <TextField
                             autoFocus
                             required

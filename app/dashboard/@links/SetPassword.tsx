@@ -11,9 +11,10 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import { useAlert } from "@/components/AlertContext";
-import { DialogContent, DialogTitle, TextField } from "@mui/material";
+import { DialogContent, DialogTitle, Stack, TextField } from "@mui/material";
 import { addPassword, removePassword } from "@/app/actions/handlePassword";
-import { useClerk } from "@clerk/nextjs";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 export default function SetPassword({
     buttonType,
@@ -29,7 +30,7 @@ export default function SetPassword({
     const [error, setError] = useState<boolean>(false);
     const { showAlert } = useAlert();
     const errorTimerRef = useRef<NodeJS.Timeout | null>(null);
-    const clerk = useClerk();
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleClickOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -93,6 +94,17 @@ export default function SetPassword({
         };
     }, []);
 
+    const handleShowPasswordChange = () => {
+        setShowPassword((prev) => !prev);
+    };
+    useEffect(() => {
+        if (!showPassword) return;
+        const timer = setTimeout(() => {
+            setShowPassword(false);
+        }, 2000);
+        return () => clearTimeout(timer);
+    }, [showPassword]);
+
     return (
         <>
             <Button
@@ -122,21 +134,35 @@ export default function SetPassword({
                         <DialogContent
                             sx={{ minWidth: { sm: "300px", xs: "250px" } }}
                         >
-                            <TextField
-                                id="password"
-                                type="password"
-                                fullWidth
-                                placeholder="Enter Password (6 - 12 Characters)"
-                                autoComplete="current-password"
-                                variant="standard"
-                                error={error}
-                                helperText={
-                                    error
-                                        ? "Password must be 6 to 12 characters"
-                                        : " "
-                                }
-                                onChange={handlePasswordChange}
-                            />
+                            <Stack direction={"row"} gap={1}>
+                                <TextField
+                                    id="password"
+                                    type={showPassword ? "text" : "password"}
+                                    placeholder="Enter Password (6 - 12 Characters)"
+                                    autoComplete="current-password"
+                                    variant="standard"
+                                    value={password}
+                                    error={error}
+                                    helperText={
+                                        error
+                                            ? "Password must be 6 to 12 characters"
+                                            : " "
+                                    }
+                                    onChange={handlePasswordChange}
+                                    sx={{
+                                        minWidth: { sm: "300px", xs: "200px" },
+                                    }}
+                                />
+                                {showPassword ? (
+                                    <VisibilityIcon
+                                        onClick={handleShowPasswordChange}
+                                    />
+                                ) : (
+                                    <VisibilityOffIcon
+                                        onClick={handleShowPasswordChange}
+                                    />
+                                )}
+                            </Stack>
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={handleClose}>Cancel</Button>
