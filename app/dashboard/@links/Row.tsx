@@ -52,9 +52,16 @@ export function Row({ link }: { link: LinkType }) {
             shortId: link.shortId,
             status: boolStatus,
         });
-        if (res?.error || res?.requiresAuth)
+        if (res?.requiresAuth) {
+            showAlert("Please sign in to proceed", "info");
+            window.location.reload();
+            return;
+        }
+        if (res?.error) {
             showAlert("Couldn't update the URL status", "error");
-        else showAlert("URL Status has been changed", "success");
+            return;
+        }
+        showAlert("URL Status has been changed", "success");
     };
 
     const handleChecked = async (

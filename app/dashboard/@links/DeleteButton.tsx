@@ -23,12 +23,17 @@ export default function DeleteButton({ link }: { link: Link }) {
             shortId: link.shortId,
         });
         handleClose();
-        if (resp?.success) {
-            showAlert("Your link has been deleted successfully", "success");
-            router.refresh();
+        if (resp.requiresAuth) {
+            showAlert("Please sign in to proceed", "info");
+            window.location.reload();
+            return;
         }
-        if (resp?.error || resp?.requiresAuth)
+        if (resp.error) {
             showAlert("Couldn't delete the URL", "error");
+            return;
+        }
+        showAlert("Your link has been deleted successfully", "success");
+        router.refresh();
     };
 
     return (

@@ -43,9 +43,13 @@ export default function LinkForm({
         if (!state) return;
         if (state?.requiresAuth) {
             showAlert("Please signin to proceed!", "info");
-            clerk.openSignIn({
-                forceRedirectUrl: `/dashboard?pendingUrl=${encodeURIComponent(state.longUrl as string)}`,
-            });
+            if (page === "home") {
+                clerk.openSignIn({
+                    forceRedirectUrl: `/dashboard?pendingUrl=${encodeURIComponent(state.longUrl as string)}`,
+                });
+            } else {
+                window.location.reload();
+            }
         } else if (state?.error) {
             showAlert(state?.error, "error");
         } else if (state.success && state.shortId) {

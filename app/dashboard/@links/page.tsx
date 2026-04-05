@@ -37,9 +37,7 @@ export default async function CollapsibleTable({
     const page = Number(params.page) || 0;
     const limit = Number(params.limit) || 10;
     const { userId } = await auth();
-    if (!userId) {
-        return { error: "Please sign in first", requiresAuth: true };
-    }
+    if (!userId) return;
 
     const [links, totalLinks] = await Promise.all([
         prisma.link.findMany({

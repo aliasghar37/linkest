@@ -36,15 +36,17 @@ export default function SetExpiry({
             expiry: value.toISOString(),
         });
         handleClose();
-        if (resp?.error || resp?.requiresAuth)
-            showAlert("Could not set expiry to the URL", "error");
-        if (resp?.success) {
-            showAlert(
-                "Expiry has been added to the URL successfully",
-                "success",
-            );
-            setHasExpiry(true);
+        if (resp?.requiresAuth) {
+            showAlert("Please sign in to proceed", "info");
+            window.location.reload();
+            return;
         }
+        if (resp?.error) {
+            showAlert("Could not set expiry to the URL", "error");
+            return;
+        }
+        showAlert("Expiry has been added to the URL successfully", "success");
+        setHasExpiry(true);
     };
 
     const handleRemoveExpirySubmit = async (
@@ -57,15 +59,17 @@ export default function SetExpiry({
             expiresAt: null,
         });
         handleClose();
-        if (resp.error)
-            showAlert("Could not remove expiry to the URL", "error");
-        if (resp.success) {
-            showAlert(
-                "Expiry has been removed to the URL successfully",
-                "success",
-            );
-            setHasExpiry(false);
+        if (resp.requiresAuth) {
+            showAlert("Please sign in to proceed", "info");
+            window.location.reload();
+            return;
         }
+        if (resp.error) {
+            showAlert("Could not remove expiry to the URL", "error");
+            return;
+        }
+        showAlert("Expiry has been removed to the URL successfully", "success");
+        setHasExpiry(false);
     };
 
     return (

@@ -10,8 +10,7 @@ type Stats = {
 
 export default async function AddLink() {
     const { userId } = await auth();
-    if (!userId) return { error: "Please sign in first", requiresAuth: true };
-
+    if (!userId) return;
     const [user, clickAgg] = await prisma.$transaction([
         prisma.user.findUnique({
             where: { clerkId: userId },

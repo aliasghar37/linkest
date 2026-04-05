@@ -13,6 +13,7 @@ import DialogActions from "@mui/material/DialogActions";
 import { useAlert } from "@/components/AlertContext";
 import { DialogContent, DialogTitle, TextField } from "@mui/material";
 import { addPassword, removePassword } from "@/app/actions/handlePassword";
+import { useClerk } from "@clerk/nextjs";
 
 export default function SetPassword({
     buttonType,
@@ -28,6 +29,7 @@ export default function SetPassword({
     const [error, setError] = useState<boolean>(false);
     const { showAlert } = useAlert();
     const errorTimerRef = useRef<NodeJS.Timeout | null>(null);
+    const clerk = useClerk();
 
     const handleClickOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -35,7 +37,12 @@ export default function SetPassword({
     const handleAddPasswordSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
         const resp = await addPassword(shortId, password);
-        if (resp.error || resp.requiresAuth) {
+        if (resp.requiresAuth) {
+            showAlert("Please sign in to proceed", "info");
+            window.location.reload();
+            return;
+        }
+        if (resp.error) {
             showAlert("Couldn't add password to the URL", "error");
             return;
         }
@@ -50,15 +57,17 @@ export default function SetPassword({
         e.preventDefault();
         const resp = await removePassword(shortId);
         handleClose();
-        if (resp?.error)
-            showAlert("Could not remove expiry to the URL", "error");
-        if (resp?.success) {
-            showAlert(
-                "Expiry has been removed to the URL successfully",
-                "success",
-            );
-            setHasPassword(false);
+        if (resp?.requiresAuth) {
+            showAlert("Please sign in to proceed", "error");
+            window.location.reload();
+            return;
         }
+        if (resp?.error) {
+            showAlert("Could not remove expiry to the URL", "error");
+            return;
+        }
+        showAlert("Expiry has been removed to the URL successfully", "success");
+        setHasPassword(false);
     };
 
     const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
