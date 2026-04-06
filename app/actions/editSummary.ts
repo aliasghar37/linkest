@@ -5,6 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { CacheLinkType } from "./handleLinkForm";
 import { redis } from "@/lib/redis";
+import { Link } from "../dashboard/@links/page";
 
 export default async function editSummary(rawSummary: string, shortId: string) {
     const { userId } = await auth();
@@ -22,13 +23,13 @@ export default async function editSummary(rawSummary: string, shortId: string) {
         return { error: "Summary contains invalid characters" };
 
     try {
-        const link = await prisma.link.findUnique({
+        const linkFound = await prisma.link.findUnique({
             where: { shortId },
         });
-        if (!link || link.userId !== userId)
+        if (!linkFound || linkFound.userId !== userId)
             return { error: "Link not found or unauthorized" };
-        await prisma.link.update({
-            where: { id: link.id },
+        const link: Link = await prisma.link.update({
+            where: { id: linkFound.id },
             data: { summary },
         });
         const cacheLink: CacheLinkType = {
@@ -36,7 +37,7 @@ export default async function editSummary(rawSummary: string, shortId: string) {
             shortId: link.shortId,
             shortUrl: link.shortUrl,
             longUrl: link.longUrl,
-            status: true,
+            status: link.status,
             summary: link.summary,
             title: link.title,
             previewPage: link.previewPage,

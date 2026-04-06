@@ -13,7 +13,7 @@ const updateRedis = async (link: Link, shortId: string) => {
         shortId: link.shortId,
         shortUrl: link.shortUrl,
         longUrl: link.longUrl,
-        status: true,
+        status: link.status,
         summary: link.summary,
         title: link.title,
         previewPage: link.previewPage,

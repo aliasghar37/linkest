@@ -14,11 +14,13 @@ export default async function RedirectPage({
     params: Promise<{ shortId: string }>;
 }) {
     const { shortId } = await params;
+    let isCacheHit = false;
     const cachedLink: string | null = await redis.get(`link-${shortId}`);
     let link: CacheLinkType | Link | null = null;
     if (cachedLink) {
         try {
             link = JSON.parse(cachedLink) as CacheLinkType;
+            isCacheHit = true;
         } catch {
             await redis.del(`link-${shortId}`);
         }
@@ -33,22 +35,24 @@ export default async function RedirectPage({
     if (link.expiresAt && new Date(link.expiresAt) < new Date()) {
         return <ShowError message="Short URL has been expired" />;
     }
-    const cacheLink: CacheLinkType = {
-        id: link.id,
-        shortId: link.shortId,
-        shortUrl: link.shortUrl,
-        longUrl: link.longUrl,
-        status: link.status,
-        summary: link.summary,
-        title: link.title,
-        previewPage: link.previewPage,
-        expiresAt: link.expiresAt,
-        userId: link.userId,
-        password: link.password,
-    };
-    await redis.set(`link-${shortId}`, JSON.stringify(cacheLink), {
-        ex: 86400,
-    });
+    if (!isCacheHit) {
+        const cacheLink: CacheLinkType = {
+            id: link.id,
+            shortId: link.shortId,
+            shortUrl: link.shortUrl,
+            longUrl: link.longUrl,
+            status: link.status,
+            summary: link.summary,
+            title: link.title,
+            previewPage: link.previewPage,
+            expiresAt: link.expiresAt,
+            userId: link.userId,
+            password: link.password,
+        };
+        await redis.set(`link-${shortId}`, JSON.stringify(cacheLink), {
+            ex: 86400,
+        });
+    }
 
     try {
         await prisma.$transaction([
