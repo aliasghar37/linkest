@@ -17,8 +17,13 @@ import { checkPassword } from "../actions/handlePassword";
 import { Link as LinkType } from "../dashboard/@links/page";
 import { useAlert } from "@/components/AlertContext";
 import LinkestLogo from "@/components/LinkestIcon";
+import { type CacheLinkType } from "../actions/handleLinkForm";
 
-export default function previewPage({ link }: { link: LinkType }) {
+export default function previewPage({
+    link,
+}: {
+    link: LinkType | CacheLinkType;
+}) {
     const [password, SetPassword] = useState("");
     const [error, setError] = useState<boolean>(false);
     const [showPassword, setShowPassword] = useState(false);

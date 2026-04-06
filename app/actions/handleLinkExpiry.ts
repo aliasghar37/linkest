@@ -1,8 +1,35 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { redis } from "@/lib/redis";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
+import { CacheLinkType } from "./handleLinkForm";
+import { Link } from "../dashboard/@links/page";
+
+const updateRedis = async (link: Link, shortId: string) => {
+    const cacheLink: CacheLinkType = {
+        id: link.id,
+        shortId: link.shortId,
+        shortUrl: link.shortUrl,
+        longUrl: link.longUrl,
+        status: true,
+        summary: link.summary,
+        title: link.title,
+        previewPage: link.previewPage,
+        expiresAt: link.expiresAt,
+        userId: link.userId,
+        password: link.password,
+    };
+
+    const redisTransc = redis.multi();
+    redisTransc.del(`link-${shortId}`);
+    redisTransc.set(`link-${shortId}`, JSON.stringify(cacheLink), {
+        ex: 86400,
+    });
+    const redisRes = await redisTransc.exec();
+    console.log("REDIS RESPONSE IN LINK EXPIRY", redisRes);
+};
 
 export async function setLinkExpiry({
     shortId,
@@ -14,6 +41,9 @@ export async function setLinkExpiry({
     const { userId } = await auth();
     if (!userId) return { error: "Please sign in first", requiresAuth: true };
     const expiresAt = new Date(expiry);
+    if (Number.isNaN(expiresAt.getTime())) {
+        return { error: "Invalid expiry date" };
+    }
 
     try {
         const link = await prisma.link.findUnique({
@@ -26,6 +56,7 @@ export async function setLinkExpiry({
             where: { shortId: shortId },
             data: { expiresAt },
         });
+        await updateRedis(res, shortId);
         revalidatePath("/dashboard");
         if (res.id) return { success: true };
     } catch (err) {
@@ -45,12 +76,15 @@ export async function removeLinkExpiry({
     if (!userId) return { error: "Please sign in first", requiresAuth: true };
 
     try {
-        await prisma.link.update({
+        const link = await prisma.link.update({
             where: { shortId, userId },
             data: { expiresAt },
         });
-        revalidatePath("/dashboard");
-        return { success: true };
+        await updateRedis(link, shortId);
+        if (link.id) {
+            revalidatePath("/dashboard");
+            return { success: true };
+        } else return { error: true };
     } catch (err) {
         console.error("Failed to edit summary:", err);
         return { error: "Couldn't remove link expiry" };

@@ -5,6 +5,7 @@ import { auth, clerkClient } from "@clerk/nextjs/server";
 import QRCode from "qrcode";
 import { tavily } from "@tavily/core";
 import Groq from "groq-sdk";
+import { redis } from "@/lib/redis";
 
 export type FormState = {
     error?: string;
@@ -13,6 +14,20 @@ export type FormState = {
     success?: boolean;
     shortId?: string;
 } | null;
+
+export type CacheLinkType = {
+    id: string;
+    shortId: string;
+    shortUrl: string;
+    longUrl: string;
+    status: boolean;
+    summary: string;
+    title: string;
+    previewPage: boolean;
+    expiresAt: Date | string | null | undefined;
+    userId: string;
+    password: string | null | undefined;
+};
 
 const getAndUpdateCounter = async () => {
     return await prisma.counter.update({
@@ -167,7 +182,7 @@ export default async function shortenUrl(
         const qrCode = await generateQR(shortUrl);
         const { summary, title } = await generateSummary(longUrl);
 
-        await prisma.$transaction([
+        const [link] = await prisma.$transaction([
             prisma.link.create({
                 data: {
                     shortId: uniqueId,
@@ -191,7 +206,22 @@ export default async function shortenUrl(
                 data: { linksCreated: { increment: 1 } },
             }),
         ]);
-        // Cache in redis (ADD LATER)
+        const cacheLink: CacheLinkType = {
+            id: link.id,
+            shortId: link.shortId,
+            shortUrl: link.shortUrl,
+            longUrl: link.longUrl,
+            status: link.status,
+            summary: link.summary,
+            title: link.title,
+            previewPage: link.previewPage,
+            expiresAt: link.expiresAt,
+            userId: link.userId,
+            password: link.password,
+        };
+        await redis.set(`link-${uniqueId}`, JSON.stringify(cacheLink), {
+            ex: 86400,
+        });
 
         return { success: true, shortId: uniqueId };
     } catch (error) {
