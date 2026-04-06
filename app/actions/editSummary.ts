@@ -3,6 +3,8 @@
 import prisma from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
+import { CacheLinkType } from "./handleLinkForm";
+import { redis } from "@/lib/redis";
 
 export default async function editSummary(rawSummary: string, shortId: string) {
     const { userId } = await auth();
@@ -22,7 +24,6 @@ export default async function editSummary(rawSummary: string, shortId: string) {
     try {
         const link = await prisma.link.findUnique({
             where: { shortId },
-            select: { id: true, userId: true },
         });
         if (!link || link.userId !== userId)
             return { error: "Link not found or unauthorized" };
@@ -30,6 +31,26 @@ export default async function editSummary(rawSummary: string, shortId: string) {
             where: { id: link.id },
             data: { summary },
         });
+        const cacheLink: CacheLinkType = {
+            id: link.id,
+            shortId: link.shortId,
+            shortUrl: link.shortUrl,
+            longUrl: link.longUrl,
+            status: true,
+            summary: link.summary,
+            title: link.title,
+            previewPage: link.previewPage,
+            expiresAt: link.expiresAt,
+            userId: link.userId,
+            password: link.password,
+        };
+
+        const redisTransc = redis.multi();
+        redisTransc.del(`link-${shortId}`);
+        redisTransc.set(`link-${shortId}`, JSON.stringify(cacheLink), {
+            ex: 86400,
+        });
+        const redisRes = await redisTransc.exec();
         revalidatePath("/dashboard");
         return { success: true };
     } catch (error) {

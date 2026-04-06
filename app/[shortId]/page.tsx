@@ -11,9 +11,9 @@ import { Link } from "../dashboard/@links/page";
 export default async function RedirectPage({
     params,
 }: {
-    params: { shortId: string };
+    params: Promise<{ shortId: string }>;
 }) {
-    const { shortId } = params;
+    const { shortId } = await params;
     const cachedLink: string | null = await redis.get(`link-${shortId}`);
     let link: CacheLinkType | Link | null = null;
     if (cachedLink) {
