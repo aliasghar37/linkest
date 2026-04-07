@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -16,7 +16,13 @@ const tiers = [
     {
         title: "Free",
         price: "0",
-        description: ["10 links", "", "Help center access", "Email support"],
+        description: [
+            "10 links",
+            "Analytics",
+            "AI generated summaries",
+            "Password Protection",
+            "Set custom auto expiry",
+        ],
         buttonText: "Sign up for free",
         buttonVariant: "outlined",
         buttonColor: "primary",
@@ -27,15 +33,17 @@ const tiers = [
         price: "10",
         description: [
             "100 links",
-            "",
+            "Analytics",
+            "AI generated summaries",
+            "Password Protection",
+            "Set custom auto expiry",
             "Help center access",
-            "Priority email support",
-            "Dedicated team",
             "Best deals",
         ],
         buttonText: "Start now",
         buttonVariant: "contained",
-        buttonColor: "secondary",
+        buttonColor: "primary",
+        paymentFormURL: "/payment",
     },
 ];
 
@@ -68,10 +76,9 @@ export default function Pricing() {
                     Pricing
                 </Typography>
                 <Typography variant="body1" sx={{ color: "text.secondary" }}>
-                    Quickly build an effective pricing table for your potential
-                    customers with this layout. <br />
-                    It&apos;s built with default Material UI components with
-                    little customization.
+                    Purchase your PRO Subscription for Linkest to get more
+                    features. <br />
+                    We provide high availability, security, and reliability.
                 </Typography>
             </Box>
             <Grid
@@ -211,6 +218,7 @@ export default function Pricing() {
                                             | "primary"
                                             | "secondary"
                                     }
+                                    href="/payment"
                                 >
                                     {tier.buttonText}
                                 </Button>
