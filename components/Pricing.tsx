@@ -11,6 +11,9 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
+import { useState } from "react";
+import { useAlert } from "./AlertContext";
+import { SignedIn, SignedOut, SignUpButton } from "@clerk/nextjs";
 
 const tiers = [
     {
@@ -48,6 +51,31 @@ const tiers = [
 ];
 
 export default function Pricing() {
+    const [loading, setLoading] = useState(false);
+    const { showAlert } = useAlert();
+
+    const handleCheckout = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch("/api/checkout_sessions", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ amount: 10 }),
+            });
+
+            const session = await response.json();
+            console.log(session);
+            if (session.url) {
+                window.location.assign(session.url);
+            }
+        } catch (err) {
+            console.error("Stripe error:", err);
+            showAlert("Stripe error, please try again", "error");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <Container
             id="pricing"
@@ -206,22 +234,55 @@ export default function Pricing() {
                                 ))}
                             </CardContent>
                             <CardActions>
-                                <Button
-                                    fullWidth
-                                    variant={
-                                        tier.buttonVariant as
-                                            | "outlined"
-                                            | "contained"
-                                    }
-                                    color={
-                                        tier.buttonColor as
-                                            | "primary"
-                                            | "secondary"
-                                    }
-                                    href="/payment"
-                                >
-                                    {tier.buttonText}
-                                </Button>
+                                {tier.title === "Professional" ? (
+                                    <Button
+                                        fullWidth
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={handleCheckout}
+                                    >
+                                        {loading ? "Loading..." : "Start now"}
+                                    </Button>
+                                ) : (
+                                    <>
+                                        <SignedOut>
+                                            <SignUpButton mode="modal">
+                                                <span
+                                                    style={{
+                                                        cursor: "pointer",
+                                                        width: "100%",
+                                                        display: "block",
+                                                    }}
+                                                >
+                                                    <Button
+                                                        fullWidth
+                                                        variant={"outlined"}
+                                                        color={"primary"}
+                                                    >
+                                                        Sign up for free
+                                                    </Button>
+                                                </span>
+                                            </SignUpButton>
+                                        </SignedOut>
+                                        <SignedIn>
+                                            <Button
+                                                fullWidth
+                                                variant={"outlined"}
+                                                color={"primary"}
+                                                disabled={true}
+                                            >
+                                                You are using the Free Plan
+                                            </Button>
+                                            {/* <Typography
+                                                variant="button"
+                                                border={2}
+                                                textAlign={"center"}
+                                            >
+                                                You are using the Free Plan
+                                            </Typography> */}
+                                        </SignedIn>
+                                    </>
+                                )}
                             </CardActions>
                         </Card>
                     </Grid>
