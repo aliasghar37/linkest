@@ -59,15 +59,20 @@ export default function Pricing() {
         try {
             const response = await fetch("/api/checkout_sessions", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ amount: 10 }),
             });
+            const session = (await response.json()) as {
+                url?: string;
+                error?: string;
+            };
 
-            const session = await response.json();
-            console.log(session);
-            if (session.url) {
-                window.location.assign(session.url);
+            if (!response.ok || !session.url) {
+                showAlert(
+                    session.error ?? "Failed to create checkout session",
+                    "error",
+                );
+                return;
             }
+            window.location.assign(session.url);
         } catch (err) {
             console.error("Stripe error:", err);
             showAlert("Stripe error, please try again", "error");
@@ -273,13 +278,6 @@ export default function Pricing() {
                                             >
                                                 You are using the Free Plan
                                             </Button>
-                                            {/* <Typography
-                                                variant="button"
-                                                border={2}
-                                                textAlign={"center"}
-                                            >
-                                                You are using the Free Plan
-                                            </Typography> */}
                                         </SignedIn>
                                     </>
                                 )}

@@ -40,7 +40,3 @@ export async function POST(req: NextRequest) {
         return new Response("Error verifying webhook", { status: 400 });
     }
 }
-
-// export async function POST() {
-//   return Response.json({ message: 'The route is working' })
-// }

@@ -609,16 +609,6 @@ export type LinkUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.LinkScalarWhereInput | Prisma.LinkScalarWhereInput[]
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-  unset?: boolean
-}
-
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-  unset?: boolean
-}
-
 export type BoolFieldUpdateOperationsInput = {
   set?: boolean
 }

@@ -11,8 +11,7 @@
 
 export const Role = {
   free: 'free',
-  pro: 'pro',
-  admin: 'admin'
+  pro: 'pro'
 } as const
 
 export type Role = (typeof Role)[keyof typeof Role]

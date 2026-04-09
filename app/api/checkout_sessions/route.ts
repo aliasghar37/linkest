@@ -8,13 +8,16 @@ export async function POST(req: Request) {
     try {
         const { userId } = await auth();
         if (!userId)
-            return { error: "Please signin first", requiresAuth: true };
-        const body = (await req.json()) as { amount?: number };
-        const amount = Number(body?.amount);
-        if (!Number.isFinite(amount) || amount <= 0) {
             return NextResponse.json(
-                { error: "Invalid amount" },
-                { status: 400 },
+                { error: "Please sign in to continue" },
+                { status: 401 },
+            );
+
+        const priceId = process.env.STRIPE_PRICE_ID;
+        if (!priceId) {
+            return NextResponse.json(
+                { error: "Missing Stripe price configuration" },
+                { status: 500 },
             );
         }
 
@@ -27,26 +30,23 @@ export async function POST(req: Request) {
             );
         }
         const params: Parameters<typeof stripe.checkout.sessions.create>[0] = {
-            submit_type: "pay",
+            submit_type: "subscribe",
             payment_method_types: ["card"],
             metadata: {
-                userId: userId,
+                userId,
+            },
+            subscription_data: {
+                metadata: {
+                    userId,
+                },
             },
             line_items: [
                 {
-                    price_data: {
-                        currency: "usd",
-                        product_data: {
-                            name: "Linkest Pro Plan",
-                            description:
-                                "Unlimited links, analytics, AI generated summaries, and password protection",
-                        },
-                        unit_amount: 1000,
-                    },
+                    price: priceId,
                     quantity: 1,
                 },
             ],
-            mode: "payment",
+            mode: "subscription",
             success_url: `${origin}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${origin}/dashboard`,
         };

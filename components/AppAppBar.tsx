@@ -21,6 +21,7 @@ import {
     SignUpButton,
     UserButton,
 } from "@clerk/nextjs";
+import ManageBillingButton from "./ManageBillingBtn";
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
     display: "flex",
@@ -167,6 +168,7 @@ export default function AppAppBar() {
                             >
                                 <Link href="/dashboard">Dashboard</Link>
                             </Button>
+                            <ManageBillingButton size="small" />
                             <UserButton />
                         </SignedIn>
                     </Box>
@@ -180,6 +182,7 @@ export default function AppAppBar() {
                             >
                                 <Link href="/dashboard">Dashboard</Link>
                             </Button>
+                            <ManageBillingButton size="small" />
                             <UserButton />
                         </SignedIn>
 
