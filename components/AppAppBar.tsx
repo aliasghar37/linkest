@@ -182,7 +182,6 @@ export default function AppAppBar() {
                             >
                                 <Link href="/dashboard">Dashboard</Link>
                             </Button>
-                            <ManageBillingButton size="small" />
                             <UserButton />
                         </SignedIn>
 
@@ -269,6 +268,18 @@ export default function AppAppBar() {
                                             FAQ
                                         </Button>
                                     </Link>
+                                </MenuItem>
+                                <MenuItem
+                                    sx={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        gap: 1,
+                                        width: "100%",
+                                    }}
+                                >
+                                    <SignedIn>
+                                        <ManageBillingButton fullWidth />
+                                    </SignedIn>
                                 </MenuItem>
                                 <SignedOut>
                                     <Divider sx={{ my: 3 }} />

@@ -31,6 +31,12 @@ export default function SetExpiry({
     ) => {
         event.preventDefault();
         if (!value) return;
+
+        if (value.valueOf() <= Date.now()) {
+            showAlert("Please select a future expiry time", "error");
+            return;
+        }
+
         const resp = await setLinkExpiry({
             shortId: link.shortId,
             expiry: value.toISOString(),

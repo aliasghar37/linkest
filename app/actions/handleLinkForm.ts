@@ -111,6 +111,31 @@ const checkIfUserExists = async (userId: string) => {
     });
 };
 
+const canCreateMoreLinks = async (userId: string) => {
+    const user = await prisma.user.findUnique({
+        where: { clerkId: userId },
+        select: { role: true, linksCreated: true },
+    });
+    if (!user) {
+        return {
+            allowed: false,
+            error: "Failed to load user profile. Please try again.",
+        };
+    }
+    const freePlanLimit = 10;
+    const isFreeLimitReached =
+        user.role === "free" && user.linksCreated >= freePlanLimit;
+
+    if (isFreeLimitReached) {
+        return {
+            allowed: false,
+            error: "Free plan limit reached (10 links). Upgrade to Pro to create more links.",
+        };
+    }
+
+    return { allowed: true };
+};
+
 export default async function shortenUrl(
     prevState: FormState,
     formData: FormData,
@@ -133,6 +158,11 @@ export default async function shortenUrl(
     } catch (error) {
         console.error("Failed to sync user:", error);
         return { error: "Failed to sync user profile. Please try again." };
+    }
+
+    const limitCheck = await canCreateMoreLinks(userId);
+    if (!limitCheck.allowed) {
+        return { error: limitCheck.error };
     }
 
     const inputAlias = formData.get("alias") as string;

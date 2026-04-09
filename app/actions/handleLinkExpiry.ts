@@ -44,6 +44,9 @@ export async function setLinkExpiry({
     if (Number.isNaN(expiresAt.getTime())) {
         return { error: "Invalid expiry date" };
     }
+    if (expiresAt.getTime() <= Date.now()) {
+        return { error: "Expiry must be set in the future" };
+    }
 
     try {
         const link = await prisma.link.findUnique({
@@ -51,7 +54,7 @@ export async function setLinkExpiry({
             select: { id: true, userId: true },
         });
         if (!link || link.userId !== userId)
-            return { error: "Couldn't find link or unauthorized usre" };
+            return { error: "Couldn't find link or unauthorized user" };
         const res = await prisma.link.update({
             where: { shortId: shortId },
             data: { expiresAt },
