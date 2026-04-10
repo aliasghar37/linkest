@@ -17,9 +17,8 @@ export type Link = {
     shortUrl: string;
     longUrl: string;
     summary: string;
-    title: string;
     qrCode: string;
-    createdAt: Date;
+    createdAtLabel: string;
     expiresAt?: Date | null;
     clicks: number;
     status: boolean;
@@ -39,15 +38,45 @@ export default async function CollapsibleTable({
     const { userId } = await auth();
     if (!userId) return;
 
-    const [links, totalLinks] = await Promise.all([
+    const timeFormatter = new Intl.DateTimeFormat("en-GB", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+    });
+    const dayMonthFormatter = new Intl.DateTimeFormat("en-US", {
+        month: "short",
+        day: "numeric",
+    });
+
+    const [rawLinks, totalLinks] = await Promise.all([
         prisma.link.findMany({
             where: { userId },
             skip: page * 10,
             take: limit,
             orderBy: { createdAt: "desc" },
+            select: {
+                id: true,
+                shortId: true,
+                shortUrl: true,
+                longUrl: true,
+                summary: true,
+                qrCode: true,
+                createdAt: true,
+                expiresAt: true,
+                clicks: true,
+                status: true,
+                userId: true,
+                previewPage: true,
+                password: true,
+            },
         }),
         prisma.link.count({ where: { userId } }),
     ]);
+
+    const links: Link[] = rawLinks.map((link) => ({
+        ...link,
+        createdAtLabel: `${timeFormatter.format(link.createdAt)} ${dayMonthFormatter.format(link.createdAt)}`,
+    }));
 
     return (
         <TableContainer component={Paper}>

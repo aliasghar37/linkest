@@ -12,7 +12,7 @@ type Stats = {
 export default async function AddLink() {
     const { userId } = await auth();
     if (!userId) return;
-    const [user, clickAgg] = await prisma.$transaction([
+    const [user, clickAgg] = await Promise.all([
         prisma.user.findUnique({
             where: { clerkId: userId },
             select: { linksCreated: true, role: true },

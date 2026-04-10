@@ -2,44 +2,46 @@
 
 import prisma from "@/lib/prisma";
 import {
-    format,
     eachDayOfInterval,
-    subDays,
-    startOfMonth,
     eachMonthOfInterval,
+    format,
+    startOfMonth,
+    subDays,
 } from "date-fns";
 
-export default async function getAnalyticsData(
-    userId: string,
-    range: "daily" | "monthly",
-) {
-    const clicks = await prisma.click.findMany({
-        where: { link: { userId } },
-        orderBy: { timestamp: "asc" },
-    });
-    const now = new Date();
-    let startDate;
-    let dateFormat;
-    let interval;
+type AnalyticsPoint = {
+    label: string;
+    clicks: number;
+};
 
-    if (range === "daily") {
-        startDate = subDays(now, 6);
-        dateFormat = "MMM dd";
-        interval = eachDayOfInterval({ start: startDate, end: now });
-    } else {
-        startDate = startOfMonth(subDays(now, 365));
-        dateFormat = "MMM yyyy";
-        interval = eachMonthOfInterval({ start: startDate, end: now });
-    }
+type AnalyticsData = {
+    dailyDataset: AnalyticsPoint[];
+    monthlyDataset: AnalyticsPoint[];
+};
+
+const toDataset = (
+    clicks: Array<{ timestamp: Date }>,
+    range: "daily" | "monthly",
+) => {
+    const now = new Date();
+    const dateFormat = range === "daily" ? "MMM dd" : "MMM yyyy";
+    const interval =
+        range === "daily"
+            ? eachDayOfInterval({ start: subDays(now, 6), end: now })
+            : eachMonthOfInterval({
+                  start: startOfMonth(subDays(now, 365)),
+                  end: now,
+              });
 
     const dataMap: Record<string, number> = {};
     interval.forEach((date) => {
         dataMap[format(date, dateFormat)] = 0;
     });
+
     clicks.forEach((click) => {
         const dateKey = format(click.timestamp, dateFormat);
         if (dataMap[dateKey] !== undefined) {
-            dataMap[dateKey]++;
+            dataMap[dateKey] += 1;
         }
     });
 
@@ -47,4 +49,24 @@ export default async function getAnalyticsData(
         label,
         clicks,
     }));
+};
+
+export default async function getAnalyticsData(userId: string) {
+    const oneYearAgo = startOfMonth(subDays(new Date(), 365));
+
+    const clicks = await prisma.click.findMany({
+        where: {
+            link: { userId },
+            timestamp: { gte: oneYearAgo },
+        },
+        select: { timestamp: true },
+        orderBy: { timestamp: "asc" },
+    });
+
+    const analyticsData: AnalyticsData = {
+        dailyDataset: toDataset(clicks, "daily"),
+        monthlyDataset: toDataset(clicks, "monthly"),
+    };
+
+    return analyticsData;
 }

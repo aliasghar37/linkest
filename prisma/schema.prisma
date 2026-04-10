@@ -55,8 +55,10 @@ model Link {
     status      Boolean @default(true)
     previewPage Boolean @default(true)
 
-    userId      String  
+    userId      String
     user        User    @relation(fields: [userId], references: [clerkId])
+
+    @@index([userId, createdAt])
 }
 
 model Click {
@@ -65,6 +67,8 @@ model Click {
     
     linkId    String   @db.ObjectId
     link      Link     @relation(fields: [linkId], references: [id])
+
+    @@index([linkId, timestamp])
 }
 
 model Counter {

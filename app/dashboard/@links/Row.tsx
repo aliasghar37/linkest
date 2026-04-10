@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, Fragment } from "react";
+import dynamic from "next/dynamic";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
@@ -13,14 +14,22 @@ import { type Link as LinkType } from "./page";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import CopyButton from "./CopyButton";
-import FormattedDate from "./FormatedDate";
 import { Link, Stack, Switch } from "@mui/material";
 import updateLink from "@/app/actions/handleLinkChange";
 import { useAlert } from "@/components/AlertContext";
-import SetExpiry from "./SetExpiry";
-import DeleteButton from "./DeleteButton";
-import EditSummaryButton from "./EditSummary";
-import SetPassword from "./SetPassword";
+
+const SetExpiry = dynamic(() => import("./SetExpiry"), {
+    loading: () => null,
+});
+const DeleteButton = dynamic(() => import("./DeleteButton"), {
+    loading: () => null,
+});
+const EditSummaryButton = dynamic(() => import("./EditSummary"), {
+    loading: () => null,
+});
+const SetPassword = dynamic(() => import("./SetPassword"), {
+    loading: () => null,
+});
 
 const handleDownloadQr = (link: LinkType) => {
     const linkElement = document.createElement("a");
@@ -236,8 +245,7 @@ export function Row({ link }: { link: LinkType }) {
                         whiteSpace: "nowrap",
                     }}
                 >
-                    <FormattedDate date={link.createdAt} />
-                    {/* {`${link.createdAt}`} */}
+                    {link.createdAtLabel}
                 </TableCell>
                 <TableCell
                     align="left"
