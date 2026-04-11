@@ -102,7 +102,6 @@ export function Row({ link }: { link: LinkType }) {
                         <IconButton
                             aria-label="expand row"
                             size="small"
-                            // sx={{ width: "fit-content" }}
                             onClick={() => setOpen(!open)}
                         >
                             {open ? (

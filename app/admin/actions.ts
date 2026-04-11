@@ -13,7 +13,6 @@ export async function setRole(formData: FormData) {
 
     const client = await clerkClient();
     const id = formData.get("id") as string;
-    // const role = formData.get("role") as string;
     try {
         await client.users.updateUser(id, {
             publicMetadata: { role: "admin" },

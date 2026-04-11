@@ -16,9 +16,10 @@ export type Link = {
     shortId: string;
     shortUrl: string;
     longUrl: string;
+    title: string;
     summary: string;
     qrCode: string;
-    createdAtLabel: string;
+    createdAtLabel?: string;
     expiresAt?: Date | null;
     clicks: number;
     status: boolean;
@@ -59,6 +60,7 @@ export default async function CollapsibleTable({
                 shortId: true,
                 shortUrl: true,
                 longUrl: true,
+                title: true,
                 summary: true,
                 qrCode: true,
                 createdAt: true,

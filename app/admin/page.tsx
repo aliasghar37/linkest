@@ -66,7 +66,6 @@ const Admin = async () => {
                                 />
                                 <input
                                     type="hidden"
-                                    // value="moderator"
                                     name="role"
                                 />
                                 <button

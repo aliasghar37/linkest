@@ -6,6 +6,16 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export const runtime = "nodejs";
 
+const PRO_SUBSCRIPTION_STATUSES: Stripe.Subscription.Status[] = [
+    "active",
+    "trialing",
+];
+
+const isProStatus = (status: Stripe.Subscription.Status | null | undefined) => {
+    if (!status) return false;
+    return PRO_SUBSCRIPTION_STATUSES.includes(status);
+};
+
 const getCustomerId = (subscription: Stripe.Subscription) => {
     const customerId =
         typeof subscription.customer === "string"
@@ -34,13 +44,53 @@ const findUserForSubscription = async (subscription: Stripe.Subscription) => {
     });
 };
 
+const findUserForCheckoutSession = async (session: Stripe.Checkout.Session) => {
+    const metadataUserId = session.metadata?.userId;
+    const subscriptionId =
+        typeof session.subscription === "string"
+            ? session.subscription
+            : session.subscription?.id;
+    const customerId =
+        typeof session.customer === "string"
+            ? session.customer
+            : session.customer?.id;
+
+    if (subscriptionId) {
+        const userBySubscription = await prisma.user.findFirst({
+            where: { stripeSubscriptionId: subscriptionId },
+        });
+        if (userBySubscription) return userBySubscription;
+    }
+
+    if (customerId) {
+        const userByCustomer = await prisma.user.findFirst({
+            where: { stripeCustomerId: customerId },
+        });
+        if (userByCustomer) return userByCustomer;
+    }
+
+    if (!metadataUserId) return null;
+    return prisma.user.findUnique({
+        where: { clerkId: metadataUserId },
+    });
+};
+
 const updateUserSubscription = async (subscription: Stripe.Subscription) => {
     const user = await findUserForSubscription(subscription);
-    if (!user) return;
+    if (!user) {
+        console.warn("Stripe webhook: no user found for subscription", {
+            subscriptionId: subscription.id,
+            customer:
+                typeof subscription.customer === "string"
+                    ? subscription.customer
+                    : subscription.customer.id,
+            metadataUserId: subscription.metadata?.userId,
+        });
+        return;
+    }
 
     const customerId = getCustomerId(subscription);
-    const activeStatuses = ["active", "trialing"];
-    const isPro = activeStatuses.includes(subscription.status);
+    const isPro = isProStatus(subscription.status);
 
     const periodEndUnix =
         (
@@ -54,6 +104,49 @@ const updateUserSubscription = async (subscription: Stripe.Subscription) => {
         data: {
             role: isPro ? "pro" : "free",
             stripeCustomerId: customerId,
+            stripeSubscriptionId: subscription.id,
+            stripePriceId: subscription.items.data[0]?.price.id ?? null,
+            subscriptionStatus: subscription.status,
+            currentPeriodEnd: periodEndUnix
+                ? new Date(periodEndUnix * 1000)
+                : null,
+        },
+    });
+};
+
+const handleCheckoutSessionCompleted = async (
+    session: Stripe.Checkout.Session,
+) => {
+    if (!session.subscription) return;
+
+    const subscriptionId =
+        typeof session.subscription === "string"
+            ? session.subscription
+            : session.subscription.id;
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+    const user = await findUserForCheckoutSession(session);
+
+    if (!user) {
+        await updateUserSubscription(subscription);
+        return;
+    }
+
+    const customerId =
+        typeof session.customer === "string"
+            ? session.customer
+            : session.customer?.id;
+    const periodEndUnix =
+        (
+            subscription as Stripe.Subscription & {
+                current_period_end?: number;
+            }
+        ).current_period_end ?? null;
+
+    await prisma.user.update({
+        where: { id: user.id },
+        data: {
+            role: isProStatus(subscription.status) ? "pro" : "free",
+            stripeCustomerId: customerId ?? user.stripeCustomerId,
             stripeSubscriptionId: subscription.id,
             stripePriceId: subscription.items.data[0]?.price.id ?? null,
             subscriptionStatus: subscription.status,
@@ -92,15 +185,7 @@ export async function POST(req: Request) {
         switch (event.type) {
             case "checkout.session.completed": {
                 const session = event.data.object as Stripe.Checkout.Session;
-                if (!session.subscription) break;
-
-                const subscriptionId =
-                    typeof session.subscription === "string"
-                        ? session.subscription
-                        : session.subscription.id;
-                const subscription =
-                    await stripe.subscriptions.retrieve(subscriptionId);
-                await updateUserSubscription(subscription);
+                await handleCheckoutSessionCompleted(session);
                 break;
             }
             case "customer.subscription.created":

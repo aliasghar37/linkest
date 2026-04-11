@@ -32,6 +32,7 @@ export async function POST(req: Request) {
         const params: Parameters<typeof stripe.checkout.sessions.create>[0] = {
             submit_type: "subscribe",
             payment_method_types: ["card"],
+            client_reference_id: userId,
             metadata: {
                 userId,
             },
