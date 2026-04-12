@@ -11,10 +11,10 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Theme } from "@mui/material/styles";
 import { useAlert } from "./AlertContext";
-import { SignedIn, SignedOut, SignUpButton } from "@clerk/nextjs";
+import { SignUpButton } from "@clerk/nextjs";
 
 const tiers = [
     {
@@ -53,9 +53,48 @@ const tiers = [
 
 const proTier = tiers[1];
 
+type PlanStatus = "signed-out" | "free" | "pro";
+
 export default function Pricing({ embedded = false }: { embedded?: boolean }) {
     const [loading, setLoading] = useState(false);
+    const [planStatus, setPlanStatus] = useState<PlanStatus>("signed-out");
     const { showAlert } = useAlert();
+
+    useEffect(() => {
+        let mounted = true;
+
+        const loadPlanStatus = async () => {
+            try {
+                const response = await fetch("/api/user-role", {
+                    method: "GET",
+                    cache: "no-store",
+                });
+                const data = (await response.json()) as {
+                    status?: "signed-out" | "free" | "pro";
+                };
+                if (!mounted) return;
+                if (
+                    response.ok &&
+                    (data.status === "signed-out" ||
+                        data.status === "free" ||
+                        data.status === "pro")
+                ) {
+                    setPlanStatus(data.status);
+                    return;
+                }
+
+                setPlanStatus("signed-out");
+            } catch {
+                if (!mounted) return;
+                setPlanStatus("signed-out");
+            }
+        };
+        loadPlanStatus();
+
+        return () => {
+            mounted = false;
+        };
+    }, []);
 
     const handleCheckout = async () => {
         setLoading(true);
@@ -82,6 +121,71 @@ export default function Pricing({ embedded = false }: { embedded?: boolean }) {
         } finally {
             setLoading(false);
         }
+    };
+
+    const renderProAction = () => {
+        if (planStatus === "pro") {
+            return (
+                <Button fullWidth variant="contained" color="primary" disabled>
+                    You are using pro plan
+                </Button>
+            );
+        }
+        if (planStatus === "signed-out") {
+            return (
+                <SignUpButton mode="modal">
+                    <span
+                        style={{
+                            cursor: "pointer",
+                            width: "100%",
+                            display: "block",
+                        }}
+                    >
+                        <Button fullWidth variant="contained" color="primary">
+                            Sign up to start
+                        </Button>
+                    </span>
+                </SignUpButton>
+            );
+        }
+
+        return (
+            <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                onClick={handleCheckout}
+                disabled={loading}
+            >
+                {loading ? "Loading..." : "Start now"}
+            </Button>
+        );
+    };
+
+    const renderFreeAction = () => {
+        if (planStatus === "pro") return null;
+        if (planStatus === "free") {
+            return (
+                <Button fullWidth variant="outlined" color="primary" disabled>
+                    You are using the Free Plan
+                </Button>
+            );
+        }
+        return (
+            <SignUpButton mode="modal">
+                <span
+                    style={{
+                        cursor: "pointer",
+                        width: "100%",
+                        display: "block",
+                    }}
+                >
+                    <Button fullWidth variant="outlined" color="primary">
+                        Sign up to start
+                    </Button>
+                </span>
+            </SignUpButton>
+        );
     };
 
     const pricingCard = (
@@ -173,16 +277,7 @@ export default function Pricing({ embedded = false }: { embedded?: boolean }) {
                     </Box>
                 ))}
             </CardContent>
-            <CardActions>
-                <Button
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    onClick={handleCheckout}
-                >
-                    {loading ? "Loading..." : "Start now"}
-                </Button>
-            </CardActions>
+            <CardActions>{renderProAction()}</CardActions>
         </Card>
     );
 
@@ -314,37 +409,7 @@ export default function Pricing({ embedded = false }: { embedded?: boolean }) {
                                         </Box>
                                     ))}
                                 </CardContent>
-                                <CardActions>
-                                    <SignedOut>
-                                        <SignUpButton mode="modal">
-                                            <span
-                                                style={{
-                                                    cursor: "pointer",
-                                                    width: "100%",
-                                                    display: "block",
-                                                }}
-                                            >
-                                                <Button
-                                                    fullWidth
-                                                    variant={"outlined"}
-                                                    color={"primary"}
-                                                >
-                                                    Sign up for free
-                                                </Button>
-                                            </span>
-                                        </SignUpButton>
-                                    </SignedOut>
-                                    <SignedIn>
-                                        <Button
-                                            fullWidth
-                                            variant={"outlined"}
-                                            color={"primary"}
-                                            disabled={true}
-                                        >
-                                            You are using the Free Plan
-                                        </Button>
-                                    </SignedIn>
-                                </CardActions>
+                                <CardActions>{renderFreeAction()}</CardActions>
                             </Card>
                         )}
                     </Grid>

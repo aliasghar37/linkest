@@ -15,25 +15,25 @@ import ViewQuiltRoundedIcon from "@mui/icons-material/ViewQuiltRounded";
 const items = [
     {
         icon: <ViewQuiltRoundedIcon />,
-        title: "Dashboard",
+        title: "Dashboard & Analytics",
         description:
-            "This item could provide information about the mobile app version of the product.",
+            "We provide our users a dashboard including analytics to manage and track their links.",
         imageLight: `url("${process.env.TEMPLATE_IMAGE_URL || "https://mui.com"}/static/images/templates/templates-images/dash-light.png")`,
         imageDark: `url("${process.env.TEMPLATE_IMAGE_URL || "https://mui.com"}/static/images/templates/templates-images/dash-dark.png")`,
     },
     {
         icon: <EdgesensorHighRoundedIcon />,
-        title: "Social Pages",
+        title: "Preview Pages & AI Summaries",
         description:
-            "This item could provide information about the mobile app version of the product.",
+            "We allow you to show preview page including AI generated summary to users to inform them about their activity.",
         imageLight: `url("${process.env.TEMPLATE_IMAGE_URL || "https://mui.com"}/static/images/templates/templates-images/mobile-light.png")`,
         imageDark: `url("${process.env.TEMPLATE_IMAGE_URL || "https://mui.com"}/static/images/templates/templates-images/mobile-dark.png")`,
     },
     {
         icon: <DevicesRoundedIcon />,
-        title: "Preview Page and AI Summary",
+        title: "Password Protection & Auto Expiry",
         description:
-            "This item could let users know the product is available on all platforms, such as web, mobile, and desktop.",
+            "You can protect your links using encrypted password and set auto expiry to links.",
         imageLight: `url("${process.env.TEMPLATE_IMAGE_URL || "https://mui.com"}/static/images/templates/templates-images/devices-light.png")`,
         imageDark: `url("${process.env.TEMPLATE_IMAGE_URL || "https://mui.com"}/static/images/templates/templates-images/devices-dark.png")`,
     },

@@ -22,6 +22,7 @@ import {
     UserButton,
 } from "@clerk/nextjs";
 import ManageBillingButton from "./ManageBillingBtn";
+import { usePathname } from "next/navigation";
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
     display: "flex",
@@ -41,10 +42,35 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 
 export default function AppAppBar() {
     const [open, setOpen] = useState(false);
+    const pathname = usePathname();
+    const isDashboardPage = pathname.startsWith("/dashboard");
 
     const toggleDrawer = (newOpen: boolean) => () => {
         setOpen(newOpen);
     };
+
+    const signedInTopAction = isDashboardPage ? (
+        <ManageBillingButton size="small" />
+    ) : (
+        <Button color="primary" variant="text" size="small" component="span">
+            <Link href="/dashboard">Dashboard</Link>
+        </Button>
+    );
+
+    const signedInDrawerAction = isDashboardPage ? (
+        <ManageBillingButton fullWidth />
+    ) : (
+        <Button
+            color="primary"
+            variant="outlined"
+            size="medium"
+            fullWidth
+            component={Link}
+            href="/dashboard"
+        >
+            Dashboard
+        </Button>
+    );
 
     return (
         <AppBar
@@ -160,28 +186,13 @@ export default function AppAppBar() {
                         </SignedOut>
 
                         <SignedIn>
-                            <Button
-                                color="primary"
-                                variant="text"
-                                size="small"
-                                component="span"
-                            >
-                                <Link href="/dashboard">Dashboard</Link>
-                            </Button>
-                            <ManageBillingButton size="small" />
+                            {signedInTopAction}
                             <UserButton />
                         </SignedIn>
                     </Box>
                     <Box sx={{ display: { xs: "flex", md: "none" }, gap: 1 }}>
                         <SignedIn>
-                            <Button
-                                color="primary"
-                                variant="text"
-                                size="small"
-                                component="span"
-                            >
-                                <Link href="/dashboard">Dashboard</Link>
-                            </Button>
+                            {signedInTopAction}
                             <UserButton />
                         </SignedIn>
 
@@ -278,7 +289,7 @@ export default function AppAppBar() {
                                     }}
                                 >
                                     <SignedIn>
-                                        <ManageBillingButton fullWidth />
+                                        {signedInDrawerAction}
                                     </SignedIn>
                                 </MenuItem>
                                 <SignedOut>
