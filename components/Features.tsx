@@ -18,24 +18,24 @@ const items = [
         title: "Dashboard & Analytics",
         description:
             "We provide our users a dashboard including analytics to manage and track their links.",
-        imageLight: `url("${process.env.TEMPLATE_IMAGE_URL || "https://mui.com"}/static/images/templates/templates-images/dash-light.png")`,
-        imageDark: `url("${process.env.TEMPLATE_IMAGE_URL || "https://mui.com"}/static/images/templates/templates-images/dash-dark.png")`,
+        imageLight: 'url("/dashboard.png")',
+        imageDark: 'url("/dashboard.png")',
     },
     {
         icon: <EdgesensorHighRoundedIcon />,
         title: "Preview Pages & AI Summaries",
         description:
             "We allow you to show preview page including AI generated summary to users to inform them about their activity.",
-        imageLight: `url("${process.env.TEMPLATE_IMAGE_URL || "https://mui.com"}/static/images/templates/templates-images/mobile-light.png")`,
-        imageDark: `url("${process.env.TEMPLATE_IMAGE_URL || "https://mui.com"}/static/images/templates/templates-images/mobile-dark.png")`,
+        imageLight: 'url("/preview-page.png")',
+        imageDark: 'url("/preview-page.png")',
     },
     {
         icon: <DevicesRoundedIcon />,
         title: "Password Protection & Auto Expiry",
         description:
             "You can protect your links using encrypted password and set auto expiry to links.",
-        imageLight: `url("${process.env.TEMPLATE_IMAGE_URL || "https://mui.com"}/static/images/templates/templates-images/devices-light.png")`,
-        imageDark: `url("${process.env.TEMPLATE_IMAGE_URL || "https://mui.com"}/static/images/templates/templates-images/devices-dark.png")`,
+        imageLight: 'url("/auto-expiry.png")',
+        imageDark: 'url("/auto-expiry.png")',
     },
 ];
 
@@ -101,7 +101,8 @@ export function MobileLayout({
                 <Box
                     sx={(theme) => ({
                         mb: 2,
-                        backgroundSize: "cover",
+                        backgroundSize: "450px",
+                        backgroundRepeat: "no-repeat",
                         backgroundPosition: "center",
                         minHeight: 280,
                         backgroundImage: "var(--items-imageLight)",
@@ -257,6 +258,8 @@ export default function Features() {
                                 width: 420,
                                 height: 500,
                                 backgroundSize: "contain",
+                                backgroundRepeat: "no-repeat",
+                                backgroundPosition: "center",
                                 backgroundImage: "var(--items-imageLight)",
                                 ...theme.applyStyles("dark", {
                                     backgroundImage: "var(--items-imageDark)",
