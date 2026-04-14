@@ -18,8 +18,8 @@ const items = [
         title: "Dashboard & Analytics",
         description:
             "We provide our users a dashboard including analytics to manage and track their links.",
-        imageLight: 'url("/dashboard.png")',
-        imageDark: 'url("/dashboard.png")',
+        imageLight: 'url("/dashboard.webp")',
+        imageDark: 'url("/dashboard.webp")',
     },
     {
         icon: <EdgesensorHighRoundedIcon />,
@@ -34,8 +34,8 @@ const items = [
         title: "Password Protection & Auto Expiry",
         description:
             "You can protect your links using encrypted password and set auto expiry to links.",
-        imageLight: 'url("/auto-expiry.png")',
-        imageDark: 'url("/auto-expiry.png")',
+        imageLight: 'url("/auto-expiry.webp")',
+        imageDark: 'url("/auto-expiry.webp")',
     },
 ];
 

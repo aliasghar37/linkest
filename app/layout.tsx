@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+// @ts-ignore
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
@@ -9,6 +10,7 @@ import { theme } from "../theme";
 import AppTheme from "../theme";
 import { AlertProvider } from "@/components/AlertContext";
 import DisplayAlert from "@/components/DisplayAlert";
+import type { Viewport } from "next";
 
 const roboto = Roboto({
     weight: ["300", "400", "500", "700"],
@@ -23,13 +25,27 @@ export const metadata: Metadata = {
         "Shorten you long URLs and merge them in a single page to share on social media.    ",
 };
 
+export const viewport: Viewport = {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+};
+
 export default function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
     return (
-        <ClerkProvider appearance={{ theme: dark }}>
+        <ClerkProvider
+            appearance={{
+                theme: dark,
+                layout: {
+                    unsafe_disableDevelopmentModeWarnings: true,
+                },
+            }}
+        >
             <html lang="en" className={roboto.variable}>
                 <body className={` antialiased`}>
                     <AppRouterCacheProvider>
