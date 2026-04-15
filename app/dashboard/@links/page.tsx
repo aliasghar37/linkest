@@ -19,6 +19,7 @@ export type Link = {
     title: string;
     summary: string;
     qrCode: string;
+    createdAt: Date | string;
     createdAtLabel?: string;
     expiresAt?: Date | null;
     clicks: number;
@@ -38,16 +39,6 @@ export default async function CollapsibleTable({
     const limit = Number(params.limit) || 10;
     const { userId } = await auth();
     if (!userId) return;
-
-    const timeFormatter = new Intl.DateTimeFormat("en-GB", {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-    });
-    const dayMonthFormatter = new Intl.DateTimeFormat("en-US", {
-        month: "short",
-        day: "numeric",
-    });
 
     const [rawLinks, totalLinks] = await Promise.all([
         prisma.link.findMany({
@@ -77,7 +68,6 @@ export default async function CollapsibleTable({
 
     const links: Link[] = rawLinks.map((link) => ({
         ...link,
-        createdAtLabel: `${timeFormatter.format(link.createdAt)} ${dayMonthFormatter.format(link.createdAt)}`,
     }));
 
     return (

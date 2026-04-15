@@ -17,6 +17,7 @@ import CopyButton from "./CopyButton";
 import { Link, Stack, Switch } from "@mui/material";
 import updateLink from "@/app/actions/handleLinkChange";
 import { useAlert } from "@/components/AlertContext";
+import FormattedDate from "./FormatedDate";
 
 const SetExpiry = dynamic(() => import("./SetExpiry"), {
     loading: () => null,
@@ -244,7 +245,7 @@ export function Row({ link }: { link: LinkType }) {
                         whiteSpace: "nowrap",
                     }}
                 >
-                    {link.createdAtLabel}
+                    <FormattedDate date={link.createdAt} />
                 </TableCell>
                 <TableCell
                     align="left"
