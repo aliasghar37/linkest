@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import type { Theme } from "@mui/material/styles";
 import { useAlert } from "./AlertContext";
 import { SignUpButton } from "@clerk/nextjs";
+import { useAuth } from "@clerk/nextjs";
 
 const tiers = [
     {
@@ -53,17 +54,27 @@ const tiers = [
 
 const proTier = tiers[1];
 
-type PlanStatus = "signed-out" | "free" | "pro";
+type PlanStatus = "free" | "pro";
 
 export default function Pricing({ embedded = false }: { embedded?: boolean }) {
     const [loading, setLoading] = useState(false);
-    const [planStatus, setPlanStatus] = useState<PlanStatus>("signed-out");
+    const [planStatus, setPlanStatus] = useState<PlanStatus>("free");
+    const [planStatusLoading, setPlanStatusLoading] = useState(true);
+    const { isLoaded, isSignedIn } = useAuth();
     const { showAlert } = useAlert();
 
     useEffect(() => {
+        if (!isLoaded) return;
+
+        if (!isSignedIn) {
+            setPlanStatusLoading(false);
+            return;
+        }
+
         let mounted = true;
 
         const loadPlanStatus = async () => {
+            setPlanStatusLoading(true);
             try {
                 const response = await fetch("/api/user-role", {
                     method: "GET",
@@ -73,20 +84,23 @@ export default function Pricing({ embedded = false }: { embedded?: boolean }) {
                     status?: "signed-out" | "free" | "pro";
                 };
                 if (!mounted) return;
+
                 if (
                     response.ok &&
-                    (data.status === "signed-out" ||
-                        data.status === "free" ||
-                        data.status === "pro")
+                    (data.status === "free" || data.status === "pro")
                 ) {
                     setPlanStatus(data.status);
                     return;
                 }
 
-                setPlanStatus("signed-out");
+                // Signed-in users should never be forced into signed-out CTA.
+                setPlanStatus("free");
             } catch {
                 if (!mounted) return;
-                setPlanStatus("signed-out");
+                setPlanStatus("free");
+            } finally {
+                if (!mounted) return;
+                setPlanStatusLoading(false);
             }
         };
         loadPlanStatus();
@@ -94,7 +108,7 @@ export default function Pricing({ embedded = false }: { embedded?: boolean }) {
         return () => {
             mounted = false;
         };
-    }, []);
+    }, [isLoaded, isSignedIn]);
 
     const handleCheckout = async () => {
         setLoading(true);
@@ -124,14 +138,15 @@ export default function Pricing({ embedded = false }: { embedded?: boolean }) {
     };
 
     const renderProAction = () => {
-        if (planStatus === "pro") {
+        if (!isLoaded || (isSignedIn && planStatusLoading)) {
             return (
                 <Button fullWidth variant="contained" color="primary" disabled>
-                    You are using pro plan
+                    Loading...
                 </Button>
             );
         }
-        if (planStatus === "signed-out") {
+
+        if (!isSignedIn) {
             return (
                 <SignUpButton mode="modal">
                     <span
@@ -149,6 +164,14 @@ export default function Pricing({ embedded = false }: { embedded?: boolean }) {
             );
         }
 
+        if (planStatus === "pro") {
+            return (
+                <Button fullWidth variant="contained" color="primary" disabled>
+                    You are using pro plan
+                </Button>
+            );
+        }
+
         return (
             <Button
                 fullWidth
@@ -163,6 +186,32 @@ export default function Pricing({ embedded = false }: { embedded?: boolean }) {
     };
 
     const renderFreeAction = () => {
+        if (!isLoaded || (isSignedIn && planStatusLoading)) {
+            return (
+                <Button fullWidth variant="outlined" color="primary" disabled>
+                    Loading...
+                </Button>
+            );
+        }
+
+        if (!isSignedIn) {
+            return (
+                <SignUpButton mode="modal">
+                    <span
+                        style={{
+                            cursor: "pointer",
+                            width: "100%",
+                            display: "block",
+                        }}
+                    >
+                        <Button fullWidth variant="outlined" color="primary">
+                            Sign up to start
+                        </Button>
+                    </span>
+                </SignUpButton>
+            );
+        }
+
         if (planStatus === "pro") return null;
         if (planStatus === "free") {
             return (
@@ -171,21 +220,7 @@ export default function Pricing({ embedded = false }: { embedded?: boolean }) {
                 </Button>
             );
         }
-        return (
-            <SignUpButton mode="modal">
-                <span
-                    style={{
-                        cursor: "pointer",
-                        width: "100%",
-                        display: "block",
-                    }}
-                >
-                    <Button fullWidth variant="outlined" color="primary">
-                        Sign up to start
-                    </Button>
-                </span>
-            </SignUpButton>
-        );
+        return null;
     };
 
     const pricingCard = (
