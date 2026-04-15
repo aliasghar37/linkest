@@ -22,15 +22,35 @@ type AnalyticsData = {
 const toDataset = (
     clicks: Array<{ timestamp: Date }>,
     range: "daily" | "monthly",
+    timezonOffset?: number,
 ) => {
     const now = new Date();
     const dateFormat = range === "daily" ? "MMM dd" : "MMM yyyy";
+
+    const adjustedClicks = clicks.map((click) => {
+        if (timezonOffset !== undefined) {
+            const adjusted = new Date(
+                click.timestamp.getTime() + timezonOffset * 60000,
+            );
+            return { timestamp: adjusted };
+        }
+        return click;
+    });
+
+    let adjustedNow = now;
+    if (timezonOffset !== undefined) {
+        adjustedNow = new Date(now.getTime() + timezonOffset * 60000);
+    }
+
     const interval =
         range === "daily"
-            ? eachDayOfInterval({ start: subDays(now, 6), end: now })
+            ? eachDayOfInterval({
+                  start: subDays(adjustedNow, 6),
+                  end: adjustedNow,
+              })
             : eachMonthOfInterval({
-                  start: startOfMonth(subDays(now, 365)),
-                  end: now,
+                  start: startOfMonth(subDays(adjustedNow, 365)),
+                  end: adjustedNow,
               });
 
     const dataMap: Record<string, number> = {};
@@ -38,7 +58,7 @@ const toDataset = (
         dataMap[format(date, dateFormat)] = 0;
     });
 
-    clicks.forEach((click) => {
+    adjustedClicks.forEach((click) => {
         const dateKey = format(click.timestamp, dateFormat);
         if (dataMap[dateKey] !== undefined) {
             dataMap[dateKey] += 1;
@@ -51,7 +71,10 @@ const toDataset = (
     }));
 };
 
-export default async function getAnalyticsData(userId: string) {
+export default async function getAnalyticsData(
+    userId: string,
+    timezoneOffset?: number,
+) {
     const oneYearAgo = startOfMonth(subDays(new Date(), 365));
 
     const clicks = await prisma.click.findMany({
@@ -64,8 +87,8 @@ export default async function getAnalyticsData(userId: string) {
     });
 
     const analyticsData: AnalyticsData = {
-        dailyDataset: toDataset(clicks, "daily"),
-        monthlyDataset: toDataset(clicks, "monthly"),
+        dailyDataset: toDataset(clicks, "daily", timezoneOffset),
+        monthlyDataset: toDataset(clicks, "monthly", timezoneOffset),
     };
 
     return analyticsData;
