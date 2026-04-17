@@ -45,7 +45,7 @@ export default function LinkForm({
             showAlert("Please signin to proceed!", "info");
             if (page === "home") {
                 clerk.openSignIn({
-                    forceRedirectUrl: `/dashboard?pendingUrl=${encodeURIComponent(state.longUrl as string)}`,
+                    forceRedirectUrl: `/dashboard?pendingUrl=${encodeURIComponent(state.longUrl as string)}&pendingAlias=${encodeURIComponent(state.alias ?? inputAlias)}`,
                 });
             } else {
                 window.location.reload();
@@ -64,6 +64,10 @@ export default function LinkForm({
     useEffect(() => {
         if (initialValue) setInputValue(initialValue);
     }, [initialValue]);
+
+    useEffect(() => {
+        setInputAlias(alias || "");
+    }, [alias]);
 
     useEffect(() => {
         if (

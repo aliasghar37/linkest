@@ -2,27 +2,25 @@
 
 import LinkForm from "@/components/LinkForm";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export default function AddLinkClient() {
     const searchParams = useSearchParams();
-    const [pendingUrl, setPendingUrl] = useState("");
-    const alias = "";
+    const pendingUrl = searchParams.get("pendingUrl") ?? "";
+    const pendingAlias = searchParams.get("pendingAlias") ?? "";
 
     useEffect(() => {
-        const url = searchParams.get("pendingUrl");
-        if (url) {
-            setPendingUrl(url);
+        if (pendingUrl) {
             const newUrl = window.location.pathname;
             window.history.replaceState({}, "", newUrl);
         }
-    }, [searchParams]);
+    }, [pendingUrl]);
 
     return (
         <LinkForm
             align="start"
             initialValue={pendingUrl}
-            alias={alias}
+            alias={pendingAlias}
             page="dashboard"
         />
     );

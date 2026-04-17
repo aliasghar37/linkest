@@ -11,6 +11,7 @@ export type FormState = {
     error?: string;
     requiresAuth?: boolean;
     longUrl?: string;
+    alias?: string;
     success?: boolean;
     shortId?: string;
 } | null;
@@ -142,16 +143,30 @@ export default async function shortenUrl(
 ): Promise<FormState> {
     const longUrl = formData.get("longUrl") as string;
     if (!longUrl) return { error: "Please enter a long URL to shorten" };
+    const inputAlias = formData.get("alias") as string;
+    const alias =
+        typeof inputAlias === "string" ? inputAlias.trim().toLowerCase() : "";
 
     try {
-        new URL(longUrl);
+        const parsedURL = new URL(longUrl);
+        const allowedProtocols = ["http:", "https:"];
+        if (!allowedProtocols.includes(parsedURL.protocol)) {
+            return {
+                error: "Only http and https protocols are allowed for security reasons.",
+            };
+        }
     } catch (error) {
-        return { error: "Please enter a valid URL" };
+        return { error: "Please enter a valid URL (including http/https)" };
     }
 
     const { userId } = await auth();
     if (!userId)
-        return { error: "Please sign in first", requiresAuth: true, longUrl };
+        return {
+            error: "Please sign in first",
+            requiresAuth: true,
+            longUrl,
+            alias,
+        };
 
     try {
         await checkIfUserExists(userId);
@@ -164,10 +179,6 @@ export default async function shortenUrl(
     if (!limitCheck.allowed) {
         return { error: limitCheck.error };
     }
-
-    const inputAlias = formData.get("alias") as string;
-    const alias =
-        typeof inputAlias === "string" ? inputAlias.trim().toLowerCase() : "";
 
     if (alias) {
         if (alias.length < 3 || alias.length > 6)
